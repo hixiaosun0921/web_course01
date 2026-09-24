@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自主选课 · 学生选课系统</title>
+<style>
+  :root {
+    --blue-800: #093F86;
+    --blue-700: #0A57B8;
+    --blue-600: #1173E0;
+    --blue-100: #D8E9FB;
+    --blue-50:  #EEF5FD;
+    --green-700: #157F51;
+    --green-600: #1E9E63;
+    --green-50:  #E8F7EF;
+    --amber-700: #9A6400;
+    --amber-600: #B26A00;
+    --amber-50:  #FFF4DC;
+    --red-600:   #C63B3B;
+    --red-50:    #FDEEEE;
+    --ink:    #17222E;
+    --ink-2:  #44566B;
+    --muted:  #64748B;
+    --line:   #DCE6F1;
+    --line-2: #EAF0F7;
+    --bg:     #F3F6FA;
+    --surface: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* ================= 顶部标题栏 ================= */
+  .topbar {
+    background: var(--blue-700);
+    color: #fff;
+  }
+
+  .topbar-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 28px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 34px;
+  }
+
+  .brand {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    white-space: nowrap;
+  }
+
+  .brand .term {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    opacity: .72;
+    margin-left: 10px;
+  }
+
+  .topnav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .topnav a {
+    color: rgba(255, 255, 255, .82);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 7px 15px;
+    border-radius: 6px;
+  }
+
+  .topnav a.active {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .userbox {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .85);
+    white-space: nowrap;
+  }
+
+  .userbox .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .userbox .logout { color: rgba(255, 255, 255, .85); }
+
+  /* ================= 页面主体 ================= */
+  .page {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px 28px 80px;
+  }
+
+  /* ---------- 搜索区 ---------- */
+  .searchbar {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px 10px 0 0;
+    padding: 14px 16px 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .search-input {
+    flex: 1;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #FBFDFF;
+    padding: 0 14px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+  }
+
+  .search-input::placeholder { color: #9AACC0; }
+
+  .search-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: default;
+    white-space: nowrap;
+  }
+
+  .btn--primary {
+    background: var(--blue-700);
+    border-color: var(--blue-700);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .btn--ghost {
+    color: var(--blue-700);
+    border-color: var(--blue-100);
+    background: var(--blue-50);
+  }
+
+  .btn--danger {
+    color: var(--red-600);
+    border-color: #F2C6C6;
+    background: #fff;
+  }
+
+  .btn--warn {
+    color: var(--amber-700);
+    border-color: #EBD3A0;
+    background: var(--amber-50);
+    font-weight: 600;
+  }
+
+  .btn[disabled] {
+    color: #9AA7B5;
+    background: #F4F7FA;
+    border-color: var(--line-2);
+  }
+
+  .refresh-note {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 0 16px 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .refresh-note .time {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+
+  /* ---------- 已选条件区 ---------- */
+  .filterbar {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    color: var(--blue-700);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 13px;
+  }
+
+  .tag .x {
+    font-size: 14px;
+    line-height: 1;
+    color: #7FA6D8;
+  }
+
+  .filter-right {
+    margin-left: auto;
+    display: flex;
+    gap: 18px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .filter-right .ctl {
+    color: var(--blue-700);
+    font-weight: 600;
+  }
+
+  .caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    vertical-align: 1px;
+    margin-left: 5px;
+  }
+
+  /* ---------- 学分信息条 ---------- */
+  .creditbar {
+    margin-top: 14px;
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    border-radius: 10px;
+    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .creditbar .item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .creditbar .label { color: var(--muted); }
+
+  .creditbar .num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue-800);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .creditbar .countdown {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--red-600);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .creditbar .round-chip {
+    background: var(--blue-700);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 3px 9px;
+    font-weight: 600;
+  }
+
+  /* ---------- 类别 Tab 与图例 ---------- */
+  .tabsbar {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 0;
+  }
+
+  .tab {
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink-2);
+    padding: 9px 18px 10px;
+    border-radius: 8px 8px 0 0;
+    cursor: default;
+    position: relative;
+    top: 2px;
+  }
+
+  .tab--active {
+    background: var(--surface);
+    border-color: var(--line);
+    border-bottom: 2px solid var(--surface);
+    color: var(--blue-700);
+    font-weight: 700;
+  }
+
+  .legend {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    padding-bottom: 10px;
+  }
+
+  .legend .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 5px;
+    vertical-align: -1px;
+  }
+
+  .dot--plain { background: #fff; border: 1.5px solid #B9C9DA; }
+  .dot--green { background: var(--green-600); }
+  .dot--red   { background: var(--red-600); }
+  .dot--amber { background: var(--amber-600); }
+
+  .legend .expand-all {
+    color: var(--blue-700);
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  /* ---------- 课程列表 ---------- */
+  .course-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .course {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid #C6D5E6;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .course--selected { border-left-color: var(--green-600); }
+
+  .course-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+  }
+
+  .course--selected .course-head { background: var(--green-50); }
+
+  .course-code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    background: #F1F5FA;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 2px 8px;
+    letter-spacing: .3px;
+  }
+
+  .course--selected .course-code {
+    background: #fff;
+    color: var(--green-700);
+    border-color: #C4E5D4;
+  }
+
+  .course-name {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .course--selected .course-name { color: var(--green-700); }
+
+  .course-meta {
+    font-size: 13px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta-sep { color: #C3D0DE; }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 2.5px 9px;
+  }
+
+  .badge--green { background: var(--green-600); color: #fff; }
+  .badge--gray  { background: #EDF2F8; color: var(--muted); border: 1px solid var(--line); }
+  .badge--amber { background: var(--amber-50); color: var(--amber-700); border: 1px solid #EBD3A0; }
+  .badge--red   { background: var(--red-50); color: var(--red-600); border: 1px solid #F2C6C6; }
+
+  .chev {
+    margin-left: auto;
+    width: 18px;
+    height: 18px;
+    color: #8DA2B8;
+    flex: none;
+  }
+
+  .chev--open { transform: rotate(180deg); }
+
+  /* ---------- 教学班面板 ---------- */
+  .class-panel { border-top: 1px solid var(--line-2); }
+
+  .class-head {
+    display: grid;
+    grid-template-columns: 82px 90px 1fr 130px 150px 90px 112px;
+    gap: 14px;
+    padding: 9px 18px 7px;
+    font-size: 12px;
+    color: var(--muted);
+    background: #F8FAFD;
+  }
+
+  .class-row {
+    display: grid;
+    grid-template-columns: 82px 90px 1fr 130px 150px 90px 112px;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 18px;
+    border-top: 1px solid var(--line-2);
+  }
+
+  .class-row--picked { background: var(--green-50); }
+
+  .class-row--conflict {
+    background: #FAFBFD;
+    color: var(--muted);
+  }
+
+  .class-row--conflict .cls-name,
+  .class-row--conflict .cls-cell { color: #93A3B5; }
+
+  .cls-name {
+    font-weight: 650;
+    color: var(--ink);
+    font-size: 13.5px;
+  }
+
+  .cls-cell {
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .cls-time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .conflict-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--red-600);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .conflict-note::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red-600);
+  }
+
+  /* 容量进度 */
+  .cap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .cap-bar {
+    width: 66px;
+    height: 6px;
+    border-radius: 999px;
+    background: #E7EEF6;
+    overflow: hidden;
+    flex: none;
+  }
+
+  .cap-bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--blue-600);
+  }
+
+  .cap-bar i.lv-mid { background: var(--amber-600); }
+  .cap-bar i.lv-full { background: var(--red-600); }
+
+  .cap-num {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .remain {
+    font-size: 13px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    color: var(--green-700);
+    white-space: nowrap;
+  }
+
+  .remain--low { color: var(--amber-700); }
+
+  .remain--full {
+    color: var(--amber-700);
+    font-weight: 700;
+  }
+
+  .class-actions { text-align: right; }
+
+  .class-actions .btn {
+    height: 32px;
+    padding: 0 15px;
+    font-size: 13px;
+  }
+
+  /* ---------- 右侧竖排导航 ---------- */
+  .side-rail {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .rail-item {
+    writing-mode: vertical-rl;
+    letter-spacing: 3px;
+    font-size: 13px;
+    padding: 16px 9px;
+    background: #fff;
+    color: var(--blue-700);
+    border: 1px solid var(--blue-100);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    text-align: center;
+  }
+
+  .rail-item--active {
+    background: var(--blue-700);
+    border-color: var(--blue-700);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width: 1180px) {
+    .side-rail { display: none; }
+  }
+
+  @media (max-width: 980px) {
+    .topnav { display: none; }
+    .searchbar { flex-wrap: wrap; }
+    .search-input { flex: 1 1 100%; }
+    .class-head { display: none; }
+    .class-row {
+      grid-template-columns: 82px 90px 1fr;
+      row-gap: 6px;
+    }
+    .class-actions { grid-column: 1 / -1; text-align: left; }
+    .legend { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= 顶部标题栏 ================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">自主选课<span class="term">2026—2027 学年 第一学期</span></div>
+    <nav class="topnav">
+      <a class="active" href="#">自主选课</a>
+      <a href="#">我的已选</a>
+      <a href="#">意向单</a>
+      <a href="#">个人资料</a>
+    </nav>
+    <div class="userbox">
+      <span class="avatar">张</span>
+      <span>张明 · 2023011001</span>
+      <span class="logout">退出登录</span>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ================= 搜索区 ================= -->
+  <section class="searchbar">
+    <input class="search-input" type="text" value=""
+           placeholder="请输入课程号、课程名称或教学班名称查询">
+    <div class="search-actions">
+      <button class="btn btn--primary" type="button">查询</button>
+      <button class="btn" type="button">重置</button>
+      <button class="btn btn--ghost" type="button">↻ 刷新余量</button>
+    </div>
+  </section>
+  <p class="refresh-note">最后刷新：<span class="time">12:30:05</span> · 每 30 秒自动刷新一次，余量以提交选课时服务端校验为准</p>
+
+  <!-- ================= 已选条件 ================= -->
+  <section class="filterbar">
+    <span class="filter-label">已选条件</span>
+    <span class="tag">有剩余量<span class="x">×</span></span>
+    <span class="tag">仅看无冲突<span class="x">×</span></span>
+    <div class="filter-right">
+      <span>排序：<span class="ctl">余量从多到少<i class="caret"></i></span></span>
+      <span><span class="ctl">展开筛选<i class="caret"></i></span></span>
+    </div>
+  </section>
+
+  <!-- ================= 学分信息条 ================= -->
+  <section class="creditbar">
+    <div class="item">
+      <span class="round-chip">第 1 轮</span>
+      <span class="label">距本轮截止</span>
+      <span class="countdown">2 天 06:12:45</span>
+    </div>
+    <div class="item">
+      <span class="label">学分要求</span>
+      <span class="num">0 ~ 36</span>
+    </div>
+    <div class="item">
+      <span class="label">已获得学分</span>
+      <span class="num">0</span>
+    </div>
+    <div class="item">
+      <span class="label">本学期已选</span>
+      <span class="num">8</span>
+      <span class="label">学分 · 2 门课程</span>
+    </div>
+  </section>
+
+  <!-- ================= 类别 Tab 与图例 ================= -->
+  <nav class="tabsbar">
+    <button class="tab tab--active" type="button">主修课程</button>
+    <button class="tab" type="button">通识选修课</button>
+    <button class="tab" type="button">体育分项</button>
+    <button class="tab" type="button">英语分项</button>
+    <div class="legend">
+      <span><span class="dot dot--plain"></span>未选</span>
+      <span><span class="dot dot--green"></span>已选</span>
+      <span><span class="dot dot--red"></span>时间冲突</span>
+      <span><span class="dot dot--amber"></span>已满 · 可候补</span>
+      <span class="expand-all">全部展开</span>
+    </div>
+  </nav>
+
+  <!-- ================= 课程列表 ================= -->
+  <section class="course-list">
+
+    <!-- 课程 1：已选，展开 -->
+    <article class="course course--selected">
+      <header class="course-head">
+        <span class="course-code">U0161001</span>
+        <h3 class="course-name">大学语文</h3>
+        <span class="course-meta">4 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">2 个教学班</span>
+        <span class="badge badge--green">已选</span>
+        <svg class="chev chev--open" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+      <div class="class-panel">
+        <div class="class-head">
+          <span>教学班</span><span>任课教师</span><span>上课时间</span>
+          <span>上课地点</span><span>容量</span><span>余量</span><span>操作</span>
+        </div>
+        <div class="class-row class-row--picked">
+          <span class="cls-name">01 班</span>
+          <span class="cls-cell">李明</span>
+          <span class="cls-cell cls-time">周一 3-4 节 · 1-16 周</span>
+          <span class="cls-cell">一教 101</span>
+          <span class="cap">
+            <span class="cap-bar"><i style="width:90%"></i></span>
+            <span class="cap-num">45 / 50</span>
+          </span>
+          <span class="remain">余 5</span>
+          <span class="class-actions"><button class="btn btn--danger" type="button">退课</button></span>
+        </div>
+        <div class="class-row">
+          <span class="cls-name">02 班</span>
+          <span class="cls-cell">王芳</span>
+          <span class="cls-cell cls-time">周三 5-6 节 · 1-16 周</span>
+          <span class="cls-cell">二教 204</span>
+          <span class="cap">
+            <span class="cap-bar"><i style="width:44%"></i></span>
+            <span class="cap-num">22 / 50</span>
+          </span>
+          <span class="remain">余 28</span>
+          <span class="class-actions"><button class="btn" type="button">选课</button></span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 课程 2：已选，收起 -->
+    <article class="course course--selected">
+      <header class="course-head">
+        <span class="course-code">U0102013</span>
+        <h3 class="course-name">大学英语（三）</h3>
+        <span class="course-meta">4 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">3 个教学班</span>
+        <span class="badge badge--green">已选</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+    </article>
+
+    <!-- 课程 3：未选，展开 -->
+    <article class="course">
+      <header class="course-head">
+        <span class="course-code">U0101010</span>
+        <h3 class="course-name">程序设计基础</h3>
+        <span class="course-meta">3 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">4 个教学班</span>
+        <span class="badge badge--gray">未选</span>
+        <svg class="chev chev--open" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+      <div class="class-panel">
+        <div class="class-head">
+          <span>教学班</span><span>任课教师</span><span>上课时间</span>
+          <span>上课地点</span><span>容量</span><span>余量</span><span>操作</span>
+        </div>
+
+        <!-- 正常可选 -->
+        <div class="class-row">
+          <span class="cls-name">01 班</span>
+          <span class="cls-cell">陈建国</span>
+          <span class="cls-cell cls-time">周二 1-2 节 · 1-16 周</span>
+          <span class="cls-cell">三教 305</span>
+          <span class="cap">
+            <span class="cap-bar"><i class="lv-mid" style="width:96%"></i></span>
+            <span class="cap-num">48 / 50</span>
+          </span>
+          <span class="remain remain--low">余 2</span>
+          <span class="class-actions"><button class="btn" type="button">选课</button></span>
+        </div>
+
+        <!-- 已满，可候补 -->
+        <div class="class-row">
+          <span class="cls-name">02 班</span>
+          <span class="cls-cell">刘敏</span>
+          <span class="cls-cell cls-time">周四 3-4 节 · 1-16 周</span>
+          <span class="cls-cell">三教 402</span>
+          <span class="cap">
+            <span class="cap-bar"><i class="lv-full" style="width:100%"></i></span>
+            <span class="cap-num">50 / 50</span>
+          </span>
+          <span class="remain remain--full">已满</span>
+          <span class="class-actions"><button class="btn btn--warn" type="button">加入候补</button></span>
+        </div>
+
+        <!-- 时间冲突（与已选大学语文 01 班 周一 3-4 节冲突） -->
+        <div class="class-row class-row--conflict">
+          <span class="cls-name">03 班</span>
+          <span class="cls-cell">周涛</span>
+          <span class="cls-cell cls-time">周一 3-4 节 · 1-16 周
+            <span class="conflict-note">冲突</span>
+          </span>
+          <span class="cls-cell">一教 205</span>
+          <span class="cap">
+            <span class="cap-bar"><i style="width:67%"></i></span>
+            <span class="cap-num">30 / 45</span>
+          </span>
+          <span class="remain">余 15</span>
+          <span class="class-actions">
+            <button class="btn" type="button" disabled>时间冲突</button>
+          </span>
+        </div>
+
+        <!-- 正常可选 -->
+        <div class="class-row">
+          <span class="cls-name">04 班</span>
+          <span class="cls-cell">吴倩</span>
+          <span class="cls-cell cls-time">周五 5-6 节 · 1-16 周</span>
+          <span class="cls-cell">二教 101</span>
+          <span class="cap">
+            <span class="cap-bar"><i style="width:20%"></i></span>
+            <span class="cap-num">12 / 60</span>
+          </span>
+          <span class="remain">余 48</span>
+          <span class="class-actions"><button class="btn" type="button">选课</button></span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 课程 4~6：未选，收起 -->
+    <article class="course">
+      <header class="course-head">
+        <span class="course-code">U0061804</span>
+        <h3 class="course-name">播音主持概论</h3>
+        <span class="course-meta">2 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">1 个教学班</span>
+        <span class="badge badge--gray">未选</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+    </article>
+
+    <article class="course">
+      <header class="course-head">
+        <span class="course-code">U0061805</span>
+        <h3 class="course-name">广播电视史</h3>
+        <span class="course-meta">2 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">1 个教学班</span>
+        <span class="badge badge--gray">未选</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+    </article>
+
+    <article class="course">
+      <header class="course-head">
+        <span class="course-code">U0061806</span>
+        <h3 class="course-name">播音语言表达</h3>
+        <span class="course-meta">2 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">1 个教学班</span>
+        <span class="badge badge--gray">未选</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+    </article>
+
+  </section>
+</main>
+
+<!-- ================= 右侧竖排导航 ================= -->
+<aside class="side-rail">
+  <span class="rail-item rail-item--active">选课信息</span>
+  <span class="rail-item">已选课信息</span>
+  <span class="rail-item">意向单</span>
+</aside>
+
+</body>
+</html>
