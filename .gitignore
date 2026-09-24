@@ -1,0 +1,75 @@
+# ===== 依赖 / 包管理 =====
+node_modules/
+bower_components/
+jspm_packages/
+.pnpm-store/
+.yarn/cache
+.yarn/unplugged
+.pnp.*
+.npm
+.nuxt/
+.next/
+.nitro/
+.output/
+.vercel/
+.netlify/
+
+# ===== 构建产物 =====
+dist/
+build/
+out/
+public/build/
+public/hot
+*.tsbuildinfo
+
+# ===== 环境变量 / 密钥 =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ===== 日志 / 缓存 =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.cache/
+.temp/
+.tmp/
+.terser-cache/
+.eslintcache
+.stylelintcache
+
+# ===== 测试 / 覆盖率 =====
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# ===== 编辑器 / IDE =====
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ===== 其他 =====
+*.local
+*.bak
+*.tmp
