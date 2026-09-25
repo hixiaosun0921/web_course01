@@ -40,6 +40,8 @@
     line-height: 1.55;
   }
 
+  [hidden] { display: none !important; }
+
   /* ================= 顶部标题栏 ================= */
   .topbar {
     background: var(--blue-700);
@@ -82,7 +84,11 @@
     font-size: 14px;
     padding: 7px 15px;
     border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
   }
+
+  .topnav a:hover { background: rgba(255, 255, 255, .12); }
 
   .topnav a.active {
     background: rgba(255, 255, 255, .18);
@@ -114,7 +120,8 @@
     color: #fff;
   }
 
-  .userbox .logout { color: rgba(255, 255, 255, .85); }
+  .userbox .logout { color: rgba(255, 255, 255, .85); cursor: pointer; }
+  .userbox .logout:hover { color: #fff; text-decoration: underline; }
 
   /* ================= 页面主体 ================= */
   .page {
@@ -162,8 +169,15 @@
     color: var(--ink-2);
     font-size: 14px;
     font-family: inherit;
-    cursor: default;
+    cursor: pointer;
     white-space: nowrap;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+
+  .btn:hover {
+    border-color: var(--blue-600);
+    color: var(--blue-700);
+    background: var(--blue-50);
   }
 
   .btn--primary {
@@ -173,16 +187,30 @@
     font-weight: 600;
   }
 
+  .btn--primary:hover {
+    background: var(--blue-600);
+    border-color: var(--blue-600);
+    color: #fff;
+  }
+
   .btn--ghost {
     color: var(--blue-700);
     border-color: var(--blue-100);
     background: var(--blue-50);
   }
 
+  .btn--ghost:hover { background: var(--blue-100); }
+
   .btn--danger {
     color: var(--red-600);
     border-color: #F2C6C6;
     background: #fff;
+  }
+
+  .btn--danger:hover {
+    color: var(--red-600);
+    border-color: var(--red-600);
+    background: var(--red-50);
   }
 
   .btn--warn {
@@ -192,7 +220,20 @@
     font-weight: 600;
   }
 
+  .btn--warn:hover {
+    background: #FFE9BF;
+    border-color: var(--amber-600);
+    color: var(--amber-700);
+  }
+
   .btn[disabled] {
+    color: #9AA7B5;
+    background: #F4F7FA;
+    border-color: var(--line-2);
+    cursor: not-allowed;
+  }
+
+  .btn[disabled]:hover {
     color: #9AA7B5;
     background: #F4F7FA;
     border-color: var(--line-2);
@@ -232,6 +273,15 @@
     color: var(--muted);
   }
 
+  .filter-tags {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filter-empty { font-size: 13px; color: #9AACC0; }
+
   .tag {
     display: inline-flex;
     align-items: center;
@@ -245,10 +295,13 @@
   }
 
   .tag .x {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1;
     color: #7FA6D8;
+    cursor: pointer;
   }
+
+  .tag .x:hover { color: var(--red-600); }
 
   .filter-right {
     margin-left: auto;
@@ -261,7 +314,11 @@
   .filter-right .ctl {
     color: var(--blue-700);
     font-weight: 600;
+    cursor: pointer;
+    user-select: none;
   }
+
+  .filter-right .ctl:hover { text-decoration: underline; }
 
   .caret {
     display: inline-block;
@@ -272,7 +329,92 @@
     border-top: 5px solid currentColor;
     vertical-align: 1px;
     margin-left: 5px;
+    transition: transform .18s ease;
   }
+
+  .ctl--open .caret { transform: rotate(180deg); }
+
+  /* 排序下拉菜单 */
+  .ctl-wrap { position: relative; }
+
+  .dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 9px);
+    min-width: 158px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    box-shadow: 0 12px 30px rgba(23, 34, 46, .14);
+    padding: 5px;
+    z-index: 40;
+  }
+
+  .dropdown button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink-2);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .dropdown button:hover { background: var(--blue-50); color: var(--blue-700); }
+
+  .dropdown button.is-active {
+    background: var(--blue-50);
+    color: var(--blue-700);
+    font-weight: 700;
+  }
+
+  .dropdown button.is-active::after { content: "✓"; float: right; }
+
+  /* 高级筛选面板 */
+  .adv-panel {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .adv-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .adv-field input,
+  .adv-field select {
+    height: 36px;
+    min-width: 170px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #FBFDFF;
+    padding: 0 10px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .adv-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .adv-actions .btn { height: 36px; }
 
   /* ---------- 学分信息条 ---------- */
   .creditbar {
@@ -340,10 +482,13 @@
     color: var(--ink-2);
     padding: 9px 18px 10px;
     border-radius: 8px 8px 0 0;
-    cursor: default;
+    cursor: pointer;
     position: relative;
     top: 2px;
+    transition: background .15s, color .15s;
   }
+
+  .tab:hover { color: var(--blue-700); background: var(--surface); }
 
   .tab--active {
     background: var(--surface);
@@ -381,7 +526,11 @@
     color: var(--blue-700);
     font-weight: 600;
     margin-left: 6px;
+    cursor: pointer;
+    user-select: none;
   }
+
+  .legend .expand-all:hover { text-decoration: underline; }
 
   /* ---------- 课程列表 ---------- */
   .course-list {
@@ -406,9 +555,13 @@
     align-items: center;
     gap: 12px;
     padding: 14px 18px;
+    cursor: pointer;
   }
 
+  .course-head:hover { background: #F7FAFE; }
+
   .course--selected .course-head { background: var(--green-50); }
+  .course--selected .course-head:hover { background: #DFF3E8; }
 
   .course-code {
     font-family: Consolas, "Courier New", monospace;
@@ -462,6 +615,7 @@
     height: 18px;
     color: #8DA2B8;
     flex: none;
+    transition: transform .18s ease;
   }
 
   .chev--open { transform: rotate(180deg); }
@@ -471,7 +625,7 @@
 
   .class-head {
     display: grid;
-    grid-template-columns: 82px 90px 1fr 130px 150px 90px 112px;
+    grid-template-columns: 30px 82px 90px 1fr 130px 150px 90px 150px;
     gap: 14px;
     padding: 9px 18px 7px;
     font-size: 12px;
@@ -481,7 +635,7 @@
 
   .class-row {
     display: grid;
-    grid-template-columns: 82px 90px 1fr 130px 150px 90px 112px;
+    grid-template-columns: 30px 82px 90px 1fr 130px 150px 90px 150px;
     gap: 14px;
     align-items: center;
     padding: 12px 18px;
@@ -489,6 +643,7 @@
   }
 
   .class-row--picked { background: var(--green-50); }
+  .class-row--wait { background: #FFFBF1; }
 
   .class-row--conflict {
     background: #FAFBFD;
@@ -497,6 +652,16 @@
 
   .class-row--conflict .cls-name,
   .class-row--conflict .cls-cell { color: #93A3B5; }
+
+  .cls-check { display: flex; align-items: center; }
+
+  .cls-check input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: var(--blue-700);
+    cursor: pointer;
+  }
 
   .cls-name {
     font-weight: 650;
@@ -578,12 +743,50 @@
     font-weight: 700;
   }
 
-  .class-actions { text-align: right; }
+  .class-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+  }
 
   .class-actions .btn {
     height: 32px;
     padding: 0 15px;
     font-size: 13px;
+  }
+
+  /* 意向单星标 */
+  .star-btn {
+    border: 0;
+    background: none;
+    padding: 3px;
+    line-height: 0;
+    border-radius: 6px;
+    color: #C2CEDC;
+    cursor: pointer;
+  }
+
+  .star-btn:hover { color: #E8A33D; background: #FFF6E6; }
+  .star-btn.is-on { color: #E8A33D; }
+  .star-btn.is-on svg { fill: currentColor; }
+
+  /* ---------- 空状态 ---------- */
+  .empty {
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 46px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .empty b {
+    display: block;
+    color: var(--ink-2);
+    font-size: 15px;
+    margin-bottom: 6px;
   }
 
   /* ---------- 右侧竖排导航 ---------- */
@@ -609,7 +812,11 @@
     border-right: none;
     border-radius: 8px 0 0 8px;
     text-align: center;
+    cursor: pointer;
+    transition: background .15s, color .15s;
   }
+
+  .rail-item:hover { background: var(--blue-50); }
 
   .rail-item--active {
     background: var(--blue-700);
@@ -617,6 +824,218 @@
     color: #fff;
     font-weight: 600;
   }
+
+  /* ---------- 批量退课操作条 ---------- */
+  .batch-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    background: #10233B;
+    color: #fff;
+    border-radius: 12px;
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 18px 44px rgba(9, 20, 35, .35);
+    z-index: 70;
+    font-size: 13.5px;
+  }
+
+  .batch-bar .num { color: #8CC6FF; font-weight: 700; font-size: 15px; }
+
+  .batch-bar .btn {
+    height: 34px;
+    border-color: transparent;
+    background: rgba(255, 255, 255, .12);
+    color: #fff;
+  }
+
+  .batch-bar .btn:hover {
+    background: rgba(255, 255, 255, .22);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .batch-bar .btn--danger { background: var(--red-600); }
+  .batch-bar .btn--danger:hover { background: #A93232; }
+
+  /* ---------- 弹窗 ---------- */
+  .modal-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 26, 38, .45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 100;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 580px;
+    max-height: 82vh;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 26px 64px rgba(9, 20, 35, .3);
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .modal-title { margin: 0; font-size: 16px; font-weight: 700; }
+
+  .modal-close {
+    margin-left: auto;
+    border: 0;
+    background: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .modal-close:hover { color: var(--ink); }
+
+  .modal-body { padding: 18px 20px; overflow: auto; }
+
+  .modal-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 13px 20px;
+    border-top: 1px solid var(--line-2);
+  }
+
+  .confirm-text { margin: 4px 0; font-size: 14px; color: var(--ink); line-height: 1.7; }
+
+  /* 弹窗内的列表 */
+  .panel-summary {
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .panel-summary b { color: var(--blue-800); font-size: 15px; }
+
+  .panel-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .panel-item {
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 11px 14px;
+  }
+
+  .panel-item--picked { background: var(--green-50); border-color: #C4E5D4; }
+
+  .panel-item-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .panel-item-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+
+  .panel-item--picked .panel-item-title { color: var(--green-700); }
+
+  .panel-item-meta { margin-top: 5px; font-size: 12.5px; color: var(--ink-2); }
+
+  .panel-item-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+  .panel-item-actions .btn { height: 30px; padding: 0 12px; font-size: 12.5px; }
+
+  .panel-empty { text-align: center; color: var(--muted); padding: 30px 0; font-size: 13.5px; }
+
+  /* 个人资料表单 */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 12px 14px;
+    align-items: center;
+    font-size: 13.5px;
+  }
+
+  .profile-grid .p-label { color: var(--muted); }
+
+  .profile-grid input {
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #FBFDFF;
+    padding: 0 10px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  /* ---------- 轻提示 ---------- */
+  .toast-wrap {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  .toast {
+    background: #1F2E3F;
+    color: #fff;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 13.5px;
+    box-shadow: 0 12px 30px rgba(9, 20, 35, .28);
+    animation: toast-in .18s ease;
+  }
+
+  .toast--success { background: var(--green-700); }
+  .toast--warn { background: var(--amber-600); }
+  .toast--error { background: var(--red-600); }
+
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ---------- 退出登录遮罩 ---------- */
+  .login-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 20, 35, .6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+  }
+
+  .login-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 34px 44px;
+    text-align: center;
+    box-shadow: 0 26px 64px rgba(0, 0, 0, .3);
+  }
+
+  .login-card .brand { color: var(--blue-700); font-size: 19px; margin-bottom: 8px; }
+
+  .login-card p { color: var(--muted); font-size: 13.5px; margin: 0 0 18px; }
 
   /* ---------- 响应式 ---------- */
   @media (max-width: 1180px) {
@@ -629,11 +1048,13 @@
     .search-input { flex: 1 1 100%; }
     .class-head { display: none; }
     .class-row {
-      grid-template-columns: 82px 90px 1fr;
+      grid-template-columns: 30px 82px 90px 1fr;
       row-gap: 6px;
     }
-    .class-actions { grid-column: 1 / -1; text-align: left; }
+    .class-actions { grid-column: 1 / -1; justify-content: flex-start; }
     .legend { display: none; }
+    .adv-panel { flex-direction: column; align-items: stretch; }
+    .adv-actions { margin-left: 0; }
   }
 </style>
 </head>
@@ -644,15 +1065,15 @@
   <div class="topbar-inner">
     <div class="brand">自主选课<span class="term">2026—2027 学年 第一学期</span></div>
     <nav class="topnav">
-      <a class="active" href="#">自主选课</a>
-      <a href="#">我的已选</a>
-      <a href="#">意向单</a>
-      <a href="#">个人资料</a>
+      <a class="active" href="#" data-nav="select">自主选课</a>
+      <a href="#" data-nav="my">我的已选</a>
+      <a href="#" data-nav="wish">意向单</a>
+      <a href="#" data-nav="profile">个人资料</a>
     </nav>
     <div class="userbox">
       <span class="avatar">张</span>
-      <span>张明 · 2023011001</span>
-      <span class="logout">退出登录</span>
+      <span id="userInfo">张明 · 2023011001</span>
+      <span class="logout" id="logoutBtn">退出登录</span>
     </div>
   </div>
 </header>
@@ -661,24 +1082,59 @@
 
   <!-- ================= 搜索区 ================= -->
   <section class="searchbar">
-    <input class="search-input" type="text" value=""
+    <input class="search-input" id="searchInput" type="text" value="" autocomplete="off"
            placeholder="请输入课程号、课程名称或教学班名称查询">
     <div class="search-actions">
-      <button class="btn btn--primary" type="button">查询</button>
-      <button class="btn" type="button">重置</button>
-      <button class="btn btn--ghost" type="button">↻ 刷新余量</button>
+      <button class="btn btn--primary" id="searchBtn" type="button">查询</button>
+      <button class="btn" id="resetBtn" type="button">重置</button>
+      <button class="btn btn--ghost" id="refreshBtn" type="button">↻ 刷新余量</button>
     </div>
   </section>
-  <p class="refresh-note">最后刷新：<span class="time">12:30:05</span> · 每 30 秒自动刷新一次，余量以提交选课时服务端校验为准</p>
+  <p class="refresh-note">最后刷新：<span class="time" id="lastRefresh">--:--:--</span> · 每 30 秒自动刷新一次，余量以提交选课时服务端校验为准</p>
 
   <!-- ================= 已选条件 ================= -->
   <section class="filterbar">
     <span class="filter-label">已选条件</span>
-    <span class="tag">有剩余量<span class="x">×</span></span>
-    <span class="tag">仅看无冲突<span class="x">×</span></span>
+    <span class="filter-tags" id="filterTags"></span>
     <div class="filter-right">
-      <span>排序：<span class="ctl">余量从多到少<i class="caret"></i></span></span>
-      <span><span class="ctl">展开筛选<i class="caret"></i></span></span>
+      <span class="ctl-wrap">
+        <span class="ctl" id="sortBtn">排序：<span id="sortLabel">余量从多到少</span><i class="caret"></i></span>
+        <div class="dropdown" id="sortMenu" hidden></div>
+      </span>
+      <span class="ctl" id="advToggle">展开筛选<i class="caret"></i></span>
+    </div>
+  </section>
+
+  <!-- ================= 高级筛选面板 ================= -->
+  <section class="adv-panel" id="advPanel" hidden>
+    <label class="adv-field">任课教师
+      <input type="text" id="advTeacher" placeholder="按教师姓名筛选">
+    </label>
+    <label class="adv-field">星期
+      <select id="advDay">
+        <option value="0">全部</option>
+        <option value="1">周一</option>
+        <option value="2">周二</option>
+        <option value="3">周三</option>
+        <option value="4">周四</option>
+        <option value="5">周五</option>
+        <option value="6">周六</option>
+        <option value="7">周日</option>
+      </select>
+    </label>
+    <label class="adv-field">节次
+      <select id="advSection">
+        <option value="0">全部</option>
+        <option value="1">1-2 节</option>
+        <option value="3">3-4 节</option>
+        <option value="5">5-6 节</option>
+        <option value="7">7-8 节</option>
+        <option value="9">9-10 节</option>
+      </select>
+    </label>
+    <div class="adv-actions">
+      <button class="btn btn--primary" id="advApply" type="button">应用筛选</button>
+      <button class="btn" id="advClear" type="button">清空</button>
     </div>
   </section>
 
@@ -687,7 +1143,7 @@
     <div class="item">
       <span class="round-chip">第 1 轮</span>
       <span class="label">距本轮截止</span>
-      <span class="countdown">2 天 06:12:45</span>
+      <span class="countdown" id="countdown">--</span>
     </div>
     <div class="item">
       <span class="label">学分要求</span>
@@ -699,222 +1155,1038 @@
     </div>
     <div class="item">
       <span class="label">本学期已选</span>
-      <span class="num">8</span>
-      <span class="label">学分 · 2 门课程</span>
+      <span class="num" id="creditNum">0</span>
+      <span class="label" id="creditLabel">学分 · 0 门课程</span>
     </div>
   </section>
 
   <!-- ================= 类别 Tab 与图例 ================= -->
   <nav class="tabsbar">
-    <button class="tab tab--active" type="button">主修课程</button>
-    <button class="tab" type="button">通识选修课</button>
-    <button class="tab" type="button">体育分项</button>
-    <button class="tab" type="button">英语分项</button>
+    <button class="tab tab--active" data-cat="主修课程" type="button">主修课程</button>
+    <button class="tab" data-cat="通识选修课" type="button">通识选修课</button>
+    <button class="tab" data-cat="体育分项" type="button">体育分项</button>
+    <button class="tab" data-cat="英语分项" type="button">英语分项</button>
     <div class="legend">
       <span><span class="dot dot--plain"></span>未选</span>
       <span><span class="dot dot--green"></span>已选</span>
       <span><span class="dot dot--red"></span>时间冲突</span>
       <span><span class="dot dot--amber"></span>已满 · 可候补</span>
-      <span class="expand-all">全部展开</span>
+      <span class="expand-all" id="expandAll">全部展开</span>
     </div>
   </nav>
 
-  <!-- ================= 课程列表 ================= -->
-  <section class="course-list">
-
-    <!-- 课程 1：已选，展开 -->
-    <article class="course course--selected">
-      <header class="course-head">
-        <span class="course-code">U0161001</span>
-        <h3 class="course-name">大学语文</h3>
-        <span class="course-meta">4 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">2 个教学班</span>
-        <span class="badge badge--green">已选</span>
-        <svg class="chev chev--open" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-      <div class="class-panel">
-        <div class="class-head">
-          <span>教学班</span><span>任课教师</span><span>上课时间</span>
-          <span>上课地点</span><span>容量</span><span>余量</span><span>操作</span>
-        </div>
-        <div class="class-row class-row--picked">
-          <span class="cls-name">01 班</span>
-          <span class="cls-cell">李明</span>
-          <span class="cls-cell cls-time">周一 3-4 节 · 1-16 周</span>
-          <span class="cls-cell">一教 101</span>
-          <span class="cap">
-            <span class="cap-bar"><i style="width:90%"></i></span>
-            <span class="cap-num">45 / 50</span>
-          </span>
-          <span class="remain">余 5</span>
-          <span class="class-actions"><button class="btn btn--danger" type="button">退课</button></span>
-        </div>
-        <div class="class-row">
-          <span class="cls-name">02 班</span>
-          <span class="cls-cell">王芳</span>
-          <span class="cls-cell cls-time">周三 5-6 节 · 1-16 周</span>
-          <span class="cls-cell">二教 204</span>
-          <span class="cap">
-            <span class="cap-bar"><i style="width:44%"></i></span>
-            <span class="cap-num">22 / 50</span>
-          </span>
-          <span class="remain">余 28</span>
-          <span class="class-actions"><button class="btn" type="button">选课</button></span>
-        </div>
-      </div>
-    </article>
-
-    <!-- 课程 2：已选，收起 -->
-    <article class="course course--selected">
-      <header class="course-head">
-        <span class="course-code">U0102013</span>
-        <h3 class="course-name">大学英语（三）</h3>
-        <span class="course-meta">4 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">3 个教学班</span>
-        <span class="badge badge--green">已选</span>
-        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-    </article>
-
-    <!-- 课程 3：未选，展开 -->
-    <article class="course">
-      <header class="course-head">
-        <span class="course-code">U0101010</span>
-        <h3 class="course-name">程序设计基础</h3>
-        <span class="course-meta">3 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">4 个教学班</span>
-        <span class="badge badge--gray">未选</span>
-        <svg class="chev chev--open" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-      <div class="class-panel">
-        <div class="class-head">
-          <span>教学班</span><span>任课教师</span><span>上课时间</span>
-          <span>上课地点</span><span>容量</span><span>余量</span><span>操作</span>
-        </div>
-
-        <!-- 正常可选 -->
-        <div class="class-row">
-          <span class="cls-name">01 班</span>
-          <span class="cls-cell">陈建国</span>
-          <span class="cls-cell cls-time">周二 1-2 节 · 1-16 周</span>
-          <span class="cls-cell">三教 305</span>
-          <span class="cap">
-            <span class="cap-bar"><i class="lv-mid" style="width:96%"></i></span>
-            <span class="cap-num">48 / 50</span>
-          </span>
-          <span class="remain remain--low">余 2</span>
-          <span class="class-actions"><button class="btn" type="button">选课</button></span>
-        </div>
-
-        <!-- 已满，可候补 -->
-        <div class="class-row">
-          <span class="cls-name">02 班</span>
-          <span class="cls-cell">刘敏</span>
-          <span class="cls-cell cls-time">周四 3-4 节 · 1-16 周</span>
-          <span class="cls-cell">三教 402</span>
-          <span class="cap">
-            <span class="cap-bar"><i class="lv-full" style="width:100%"></i></span>
-            <span class="cap-num">50 / 50</span>
-          </span>
-          <span class="remain remain--full">已满</span>
-          <span class="class-actions"><button class="btn btn--warn" type="button">加入候补</button></span>
-        </div>
-
-        <!-- 时间冲突（与已选大学语文 01 班 周一 3-4 节冲突） -->
-        <div class="class-row class-row--conflict">
-          <span class="cls-name">03 班</span>
-          <span class="cls-cell">周涛</span>
-          <span class="cls-cell cls-time">周一 3-4 节 · 1-16 周
-            <span class="conflict-note">冲突</span>
-          </span>
-          <span class="cls-cell">一教 205</span>
-          <span class="cap">
-            <span class="cap-bar"><i style="width:67%"></i></span>
-            <span class="cap-num">30 / 45</span>
-          </span>
-          <span class="remain">余 15</span>
-          <span class="class-actions">
-            <button class="btn" type="button" disabled>时间冲突</button>
-          </span>
-        </div>
-
-        <!-- 正常可选 -->
-        <div class="class-row">
-          <span class="cls-name">04 班</span>
-          <span class="cls-cell">吴倩</span>
-          <span class="cls-cell cls-time">周五 5-6 节 · 1-16 周</span>
-          <span class="cls-cell">二教 101</span>
-          <span class="cap">
-            <span class="cap-bar"><i style="width:20%"></i></span>
-            <span class="cap-num">12 / 60</span>
-          </span>
-          <span class="remain">余 48</span>
-          <span class="class-actions"><button class="btn" type="button">选课</button></span>
-        </div>
-      </div>
-    </article>
-
-    <!-- 课程 4~6：未选，收起 -->
-    <article class="course">
-      <header class="course-head">
-        <span class="course-code">U0061804</span>
-        <h3 class="course-name">播音主持概论</h3>
-        <span class="course-meta">2 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">1 个教学班</span>
-        <span class="badge badge--gray">未选</span>
-        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-    </article>
-
-    <article class="course">
-      <header class="course-head">
-        <span class="course-code">U0061805</span>
-        <h3 class="course-name">广播电视史</h3>
-        <span class="course-meta">2 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">1 个教学班</span>
-        <span class="badge badge--gray">未选</span>
-        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-    </article>
-
-    <article class="course">
-      <header class="course-head">
-        <span class="course-code">U0061806</span>
-        <h3 class="course-name">播音语言表达</h3>
-        <span class="course-meta">2 学分</span>
-        <span class="meta-sep">·</span>
-        <span class="course-meta">1 个教学班</span>
-        <span class="badge badge--gray">未选</span>
-        <svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </header>
-    </article>
-
-  </section>
+  <!-- ================= 课程列表（脚本渲染） ================= -->
+  <section class="course-list" id="courseList"></section>
 </main>
 
 <!-- ================= 右侧竖排导航 ================= -->
 <aside class="side-rail">
-  <span class="rail-item rail-item--active">选课信息</span>
-  <span class="rail-item">已选课信息</span>
-  <span class="rail-item">意向单</span>
+  <span class="rail-item rail-item--active" data-rail="select">选课信息</span>
+  <span class="rail-item" data-rail="my">已选课信息</span>
+  <span class="rail-item" data-rail="wish">意向单</span>
 </aside>
+
+<!-- ================= 批量退课操作条 ================= -->
+<div class="batch-bar" id="batchBar" hidden></div>
+
+<!-- ================= 通用弹窗 ================= -->
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h3 class="modal-title" id="modalTitle">标题</h3>
+      <button class="modal-close" type="button" data-modal="cancel" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<!-- ================= 退出登录遮罩 ================= -->
+<div class="login-mask" id="loginMask" hidden>
+  <div class="login-card">
+    <div class="brand">自主选课</div>
+    <p id="loginTip">已退出登录</p>
+    <button class="btn btn--primary" id="reloginBtn" type="button">重新登录</button>
+  </div>
+</div>
+
+<!-- ================= 轻提示容器 ================= -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= 基础数据（沿用原型 6 门课程，未新增课程） ================= */
+  const STUDENT = {
+    name: '张明',
+    no: '2023011001',
+    gender: '男',
+    college: '光电信息与计算机工程学院',
+    major: '计算机科学与技术',
+    grade: '2023 级',
+    phone: '13800001234',
+    email: 'zhangming@example.com'
+  };
+
+  const CREDIT_MAX = 36;      // 学分上限（需求 BR-01 示例 36）
+  const WISH_MAX = 20;        // 意向单上限（BR-09）
+  const REFRESH_MS = 30000;   // 余量自动刷新间隔（FR-12）
+  const DEADLINE = Date.now() + ((2 * 24 + 6) * 3600 + 12 * 60 + 45) * 1000; // 本轮截止时间
+  const DAY_NAMES = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+  const SORT_LABELS = {
+    remaining: '余量从多到少',
+    credit: '学分从高到低',
+    courseNo: '课程编号',
+    teacher: '任课教师',
+    time: '上课时间'
+  };
+
+  /* 教学班工厂：时间为结构化字段，1-16 周，用于冲突检测（BR-03） */
+  function makeClass(id, name, teacher, day, start, end, room, capacity, selected) {
+    return {
+      id, name, teacher, day, start, end, room, capacity, selected,
+      startWeek: 1, endWeek: 16
+    };
+  }
+
+  /* 6 门课程按类别归属：主修 2 门、通识 3 门、英语 1 门，体育类别暂无课程 */
+  const courses = [
+    {
+      id: 'U0161001', name: '大学语文', credit: 4, category: '主修课程',
+      classes: [
+        makeClass('U0161001-01', '01 班', '李明', 1, 3, 4, '一教 101', 50, 45),
+        makeClass('U0161001-02', '02 班', '王芳', 3, 5, 6, '二教 204', 50, 22)
+      ]
+    },
+    {
+      id: 'U0101010', name: '程序设计基础', credit: 3, category: '主修课程',
+      classes: [
+        makeClass('U0101010-01', '01 班', '陈建国', 2, 1, 2, '三教 305', 50, 48),
+        makeClass('U0101010-02', '02 班', '刘敏', 4, 3, 4, '三教 402', 50, 50),
+        makeClass('U0101010-03', '03 班', '周涛', 1, 3, 4, '一教 205', 45, 30),
+        makeClass('U0101010-04', '04 班', '吴倩', 5, 5, 6, '二教 101', 60, 12)
+      ]
+    },
+    {
+      id: 'U0102013', name: '大学英语（三）', credit: 4, category: '英语分项',
+      classes: [
+        makeClass('U0102013-01', '01 班', '张伟', 4, 5, 6, '二教 301', 55, 40),
+        makeClass('U0102013-02', '02 班', '李娜', 2, 3, 4, '二教 202', 55, 33),
+        makeClass('U0102013-03', '03 班', '王强', 5, 1, 2, '一教 110', 55, 55)
+      ]
+    },
+    {
+      id: 'U0061804', name: '播音主持概论', credit: 2, category: '通识选修课',
+      classes: [
+        makeClass('U0061804-01', '01 班', '刘洋', 3, 7, 8, '一教 302', 60, 35)
+      ]
+    },
+    {
+      id: 'U0061805', name: '广播电视史', credit: 2, category: '通识选修课',
+      classes: [
+        makeClass('U0061805-01', '01 班', '赵磊', 1, 3, 4, '二教 208', 40, 38)
+      ]
+    },
+    {
+      id: 'U0061806', name: '播音语言表达', credit: 2, category: '通识选修课',
+      classes: [
+        makeClass('U0061806-01', '01 班', '孙丽', 5, 3, 4, '三教 101', 30, 30)
+      ]
+    }
+  ];
+
+  /* 建立索引：教学班 -> 课程信息 */
+  const classMap = new Map();
+  const courseMap = new Map();
+  courses.forEach(course => {
+    courseMap.set(course.id, course);
+    course.classes.forEach(c => {
+      c.courseId = course.id;
+      c.courseName = course.name;
+      c.credit = course.credit;
+      c.category = course.category;
+      classMap.set(c.id, c);
+    });
+  });
+
+  const allClasses = () => Array.from(classMap.values());
+
+  /* ================= 运行时状态 ================= */
+  const state = {
+    keyword: '',
+    category: '主修课程',
+    onlyAvailable: true,     // 有剩余量
+    onlyNoConflict: true,    // 仅看无冲突
+    teacher: '',
+    day: 0,
+    section: 0,
+    sortBy: 'remaining',
+    expanded: new Set(['U0161001', 'U0101010']), // 初始展开的课程
+    chosen: new Set(['U0161001-01', 'U0102013-01']), // 初始已选：语文 01 班、英语 01 班（共 8 学分）
+    waitlist: new Map(),     // 教学班 id -> 候补序号
+    wishes: new Set(),       // 意向单
+    batch: new Set(),        // 批量退课勾选
+    lastRefresh: new Date()
+  };
+
+  /* ================= DOM 引用 ================= */
+  const $ = id => document.getElementById(id);
+  const el = {
+    searchInput: $('searchInput'), searchBtn: $('searchBtn'), resetBtn: $('resetBtn'), refreshBtn: $('refreshBtn'),
+    lastRefresh: $('lastRefresh'),
+    filterTags: $('filterTags'), sortBtn: $('sortBtn'), sortLabel: $('sortLabel'), sortMenu: $('sortMenu'),
+    advToggle: $('advToggle'), advPanel: $('advPanel'), advTeacher: $('advTeacher'),
+    advDay: $('advDay'), advSection: $('advSection'), advApply: $('advApply'), advClear: $('advClear'),
+    countdown: $('countdown'), creditNum: $('creditNum'), creditLabel: $('creditLabel'),
+    tabs: Array.from(document.querySelectorAll('.tab')),
+    expandAll: $('expandAll'),
+    courseList: $('courseList'),
+    batchBar: $('batchBar'),
+    toastWrap: $('toastWrap'),
+    modalMask: $('modalMask'), modalTitle: $('modalTitle'), modalBody: $('modalBody'), modalFoot: $('modalFoot'),
+    loginMask: $('loginMask'), reloginBtn: $('reloginBtn'), logoutBtn: $('logoutBtn'),
+    railItems: Array.from(document.querySelectorAll('.rail-item')),
+    navLinks: Array.from(document.querySelectorAll('.topnav a'))
+  };
+
+  /* ================= 通用工具 ================= */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[ch]);
+  }
+
+  const pad = n => String(n).padStart(2, '0');
+
+  const remaining = c => Math.max(0, c.capacity - c.selected);
+
+  const timeText = c => `${DAY_NAMES[c.day]} ${c.start}-${c.end} 节 · 1-16 周`;
+
+  /* 时间冲突判定：星期相同且节次、周次区间均重叠（BR-03） */
+  function hasTimeConflict(a, b) {
+    return a.day === b.day
+      && a.start <= b.end && a.end >= b.start
+      && a.startWeek <= b.endWeek && a.endWeek >= b.startWeek;
+  }
+
+  /* 返回与该教学班冲突的已选教学班（无则 null） */
+  function conflictOf(c) {
+    if (state.chosen.has(c.id)) return null;
+    let hit = null;
+    state.chosen.forEach(id => {
+      if (hit) return;
+      const other = classMap.get(id);
+      if (other && other.id !== c.id && hasTimeConflict(other, c)) hit = other;
+    });
+    return hit;
+  }
+
+  /* 学分统计（FR-08） */
+  function getStats() {
+    const list = allClasses().filter(c => state.chosen.has(c.id));
+    return { credit: list.reduce((sum, c) => sum + c.credit, 0), count: list.length, classes: list };
+  }
+
+  /* ================= 筛选与排序（FR-03 / FR-10） ================= */
+  function keywordHit(course, c) {
+    const kw = state.keyword.trim().toLowerCase();
+    if (!kw) return true;
+    if (course.id.toLowerCase().includes(kw) || course.name.toLowerCase().includes(kw)) return true;
+    return c.name.toLowerCase().includes(kw) || c.teacher.toLowerCase().includes(kw);
+  }
+
+  function extraHit(c) {
+    if (state.teacher && !c.teacher.includes(state.teacher)) return false;
+    if (state.day && c.day !== state.day) return false;
+    if (state.section && !(c.start <= state.section + 1 && c.end >= state.section)) return false;
+    return true;
+  }
+
+  function classVisible(course, c) {
+    if (!keywordHit(course, c) || !extraHit(c)) return false;
+    const pinned = state.chosen.has(c.id) || state.waitlist.has(c.id); // 已选/候补教学班始终保留
+    if (pinned) return true;
+    if (state.onlyAvailable && remaining(c) <= 0) return false;
+    if (state.onlyNoConflict && conflictOf(c)) return false;
+    return true;
+  }
+
+  function visibleCourses() {
+    const list = [];
+    courses.forEach(course => {
+      if (course.category !== state.category) return;
+      const classes = course.classes.filter(c => classVisible(course, c));
+      if (classes.length) list.push({ course, classes });
+    });
+    sortCourseList(list);
+    return list;
+  }
+
+  const maxRemain = item => Math.max.apply(null, item.classes.map(remaining));
+
+  function sortCourseList(list) {
+    const byRemain = (a, b) => maxRemain(b) - maxRemain(a);
+    const cmp = {
+      remaining: (a, b) => byRemain(a, b) || a.course.id.localeCompare(b.course.id),
+      credit: (a, b) => b.course.credit - a.course.credit || byRemain(a, b),
+      courseNo: (a, b) => a.course.id.localeCompare(b.course.id),
+      teacher: (a, b) => a.classes[0].teacher.localeCompare(b.classes[0].teacher, 'zh'),
+      time: (a, b) => (a.classes[0].day * 100 + a.classes[0].start) - (b.classes[0].day * 100 + b.classes[0].start)
+    }[state.sortBy];
+    list.sort((a, b) => {
+      const pinA = a.classes.some(c => state.chosen.has(c.id) || state.waitlist.has(c.id)) ? 1 : 0;
+      const pinB = b.classes.some(c => state.chosen.has(c.id) || state.waitlist.has(c.id)) ? 1 : 0;
+      return pinB - pinA || cmp(a, b);
+    });
+    list.forEach(item => sortClasses(item.classes));
+  }
+
+  function sortClasses(list) {
+    const byRemain = (a, b) => remaining(b) - remaining(a);
+    const cmp = {
+      remaining: byRemain,
+      credit: byRemain,
+      courseNo: (a, b) => a.name.localeCompare(b.name, 'zh'),
+      teacher: (a, b) => a.teacher.localeCompare(b.teacher, 'zh'),
+      time: (a, b) => (a.day * 100 + a.start) - (b.day * 100 + b.start)
+    }[state.sortBy] || byRemain;
+    list.sort((a, b) => {
+      const pinA = state.chosen.has(a.id) || state.waitlist.has(a.id) ? 1 : 0;
+      const pinB = state.chosen.has(b.id) || state.waitlist.has(b.id) ? 1 : 0;
+      return pinB - pinA || cmp(a, b);
+    });
+  }
+
+  /* ================= 渲染 ================= */
+  function render() {
+    renderFilterBar();
+    renderCreditBar();
+    renderTabs();
+    renderList();
+    renderBatchBar();
+    renderRefreshTime();
+  }
+
+  function renderFilterBar() {
+    const tags = [];
+    if (state.onlyAvailable) tags.push(['onlyAvailable', '有剩余量']);
+    if (state.onlyNoConflict) tags.push(['onlyNoConflict', '仅看无冲突']);
+    if (state.teacher) tags.push(['teacher', '教师：' + state.teacher]);
+    if (state.day) tags.push(['day', DAY_NAMES[state.day]]);
+    if (state.section) tags.push(['section', state.section + '-' + (state.section + 1) + ' 节']);
+
+    el.filterTags.innerHTML = tags.length
+      ? tags.map(t => `<span class="tag">${esc(t[1])}<span class="x" data-remove="${t[0]}" title="移除该条件">×</span></span>`).join('')
+      : '<span class="filter-empty">暂无筛选条件</span>';
+
+    el.sortLabel.textContent = SORT_LABELS[state.sortBy];
+    el.sortMenu.innerHTML = Object.keys(SORT_LABELS).map(key =>
+      `<button type="button" data-sort="${key}" class="${key === state.sortBy ? 'is-active' : ''}">${SORT_LABELS[key]}</button>`
+    ).join('');
+  }
+
+  function renderCreditBar() {
+    const stats = getStats();
+    el.creditNum.textContent = stats.credit;
+    el.creditLabel.textContent = `学分 · ${stats.count} 门课程`;
+  }
+
+  function renderRefreshTime() {
+    const d = state.lastRefresh;
+    el.lastRefresh.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+
+  function renderTabs() {
+    el.tabs.forEach(tab => tab.classList.toggle('tab--active', tab.dataset.cat === state.category));
+  }
+
+  function renderList() {
+    const list = visibleCourses();
+    el.expandAll.textContent = list.length && list.every(item => state.expanded.has(item.course.id))
+      ? '全部收起'
+      : '全部展开';
+
+    if (!list.length) {
+      el.courseList.innerHTML = '<div class="empty"><b>未找到符合条件的课程</b>可尝试重置查询条件、切换类别或移除筛选标签</div>';
+      return;
+    }
+    el.courseList.innerHTML = list.map(renderCourseItem).join('');
+  }
+
+  function renderCourseItem(item) {
+    const course = item.course;
+    const picked = course.classes.some(c => state.chosen.has(c.id));
+    const waiting = !picked && course.classes.some(c => state.waitlist.has(c.id));
+    const badge = picked
+      ? '<span class="badge badge--green">已选</span>'
+      : waiting
+        ? '<span class="badge badge--amber">候补中</span>'
+        : '<span class="badge badge--gray">未选</span>';
+    const open = state.expanded.has(course.id);
+
+    const panel = open
+      ? `<div class="class-panel">
+          <div class="class-head">
+            <span></span><span>教学班</span><span>任课教师</span><span>上课时间</span>
+            <span>上课地点</span><span>容量</span><span>余量</span><span>操作</span>
+          </div>
+          ${item.classes.map(c => renderClassRow(c)).join('')}
+        </div>`
+      : '';
+
+    return `<article class="course ${picked ? 'course--selected' : ''}" data-course="${course.id}">
+      <header class="course-head" data-toggle="${course.id}">
+        <span class="course-code">${course.id}</span>
+        <h3 class="course-name">${esc(course.name)}</h3>
+        <span class="course-meta">${course.credit} 学分</span>
+        <span class="meta-sep">·</span>
+        <span class="course-meta">${course.classes.length} 个教学班</span>
+        ${badge}
+        <svg class="chev ${open ? 'chev--open' : ''}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </header>
+      ${panel}
+    </article>`;
+  }
+
+  function renderClassRow(c) {
+    const picked = state.chosen.has(c.id);
+    const waiting = state.waitlist.has(c.id);
+    const conflict = !picked && !waiting && conflictOf(c);
+    const rem = remaining(c);
+    const pct = Math.min(100, Math.round((c.selected / c.capacity) * 100));
+    const lv = pct >= 100 ? 'lv-full' : pct >= 80 ? 'lv-mid' : '';
+    const remainCls = rem <= 0 ? 'remain--full' : rem <= 3 ? 'remain--low' : '';
+    const remainText = rem <= 0 ? '已满' : `余 ${rem}`;
+    const waitBadge = waiting ? ` <span class="badge badge--amber">候补中 · 第 ${state.waitlist.get(c.id)} 位</span>` : '';
+    const conflictNote = conflict ? '<span class="conflict-note">冲突</span>' : '';
+
+    const check = picked
+      ? `<input type="checkbox" data-action="check" data-class="${c.id}" ${state.batch.has(c.id) ? 'checked' : ''}>`
+      : '';
+
+    const star = picked ? '' : `<button class="star-btn ${state.wishes.has(c.id) ? 'is-on' : ''}" type="button"
+        data-action="wish" data-class="${c.id}" title="${state.wishes.has(c.id) ? '移出意向单' : '加入意向单'}">
+        <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+          <path d="M10 2.7l2.25 4.6 5.05.72-3.65 3.56.86 5.02L10 14.23l-4.51 2.37.86-5.02L2.7 8.02l5.05-.72z"/>
+        </svg>
+      </button>`;
+
+    const action = picked
+      ? `<button class="btn btn--danger" type="button" data-action="drop" data-class="${c.id}">退课</button>`
+      : waiting
+        ? `<button class="btn btn--warn" type="button" data-action="unwait" data-class="${c.id}">退出候补</button>`
+        : conflict
+          ? '<button class="btn" type="button" disabled>时间冲突</button>'
+          : rem <= 0
+            ? `<button class="btn btn--warn" type="button" data-action="wait" data-class="${c.id}">加入候补</button>`
+            : `<button class="btn" type="button" data-action="select" data-class="${c.id}">选课</button>`;
+
+    const rowCls = ['class-row',
+      picked ? 'class-row--picked' : '',
+      conflict ? 'class-row--conflict' : '',
+      waiting ? 'class-row--wait' : ''
+    ].filter(Boolean).join(' ');
+
+    return `<div class="${rowCls}">
+      <span class="cls-check">${check}</span>
+      <span class="cls-name">${c.name}${waitBadge}</span>
+      <span class="cls-cell">${esc(c.teacher)}</span>
+      <span class="cls-cell cls-time">${timeText(c)} ${conflictNote}</span>
+      <span class="cls-cell">${esc(c.room)}</span>
+      <span class="cap">
+        <span class="cap-bar"><i class="${lv}" style="width:${pct}%"></i></span>
+        <span class="cap-num">${c.selected} / ${c.capacity}</span>
+      </span>
+      <span class="remain ${remainCls}">${remainText}</span>
+      <span class="class-actions">${star}${action}</span>
+    </div>`;
+  }
+
+  function renderBatchBar() {
+    const ids = Array.from(state.batch);
+    if (!ids.length) {
+      el.batchBar.hidden = true;
+      return;
+    }
+    const credit = ids.reduce((sum, id) => sum + (classMap.get(id) ? classMap.get(id).credit : 0), 0);
+    el.batchBar.hidden = false;
+    el.batchBar.innerHTML = `<span>已勾选 <span class="num">${ids.length}</span> 个教学班 · 共 <span class="num">${credit}</span> 学分</span>
+      <button class="btn btn--danger" type="button" data-batch="drop">批量退课</button>
+      <button class="btn" type="button" data-batch="clear">取消勾选</button>`;
+  }
+
+  /* ================= 弹窗 ================= */
+  let confirmHandler = null;
+  let currentPanel = null;
+
+  function showModal(title, bodyHTML, footHTML) {
+    el.modalTitle.textContent = title;
+    el.modalBody.innerHTML = bodyHTML;
+    el.modalFoot.innerHTML = footHTML;
+    el.modalMask.hidden = false;
+  }
+
+  function closeModal() {
+    el.modalMask.hidden = true;
+    confirmHandler = null;
+    currentPanel = null;
+  }
+
+  function openConfirm(text, onOk) {
+    currentPanel = null;
+    confirmHandler = onOk;
+    showModal('操作确认', `<p class="confirm-text">${esc(text)}</p>`,
+      '<button class="btn" type="button" data-modal="cancel">取消</button>' +
+      '<button class="btn btn--primary" type="button" data-modal="ok">确定</button>');
+  }
+
+  function openPanel(type) {
+    confirmHandler = null;
+    currentPanel = type;
+    if (type === 'selected') {
+      showModal('已选课信息', selectedPanelHTML(), '<button class="btn" type="button" data-modal="close">关闭</button>');
+    }
+    if (type === 'wish') {
+      showModal('意向单', wishPanelHTML(),
+        '<button class="btn btn--primary" type="button" data-modal="wishAll">一键选课</button>' +
+        '<button class="btn" type="button" data-modal="close">关闭</button>');
+    }
+    if (type === 'profile') {
+      showModal('个人资料', profilePanelHTML(),
+        '<button class="btn btn--primary" type="button" data-modal="saveProfile">保存</button>' +
+        '<button class="btn" type="button" data-modal="close">关闭</button>');
+    }
+  }
+
+  function refreshPanel() {
+    if (currentPanel === 'wish') el.modalBody.innerHTML = wishPanelHTML();
+    if (currentPanel === 'selected') el.modalBody.innerHTML = selectedPanelHTML();
+  }
+
+  function selectedPanelHTML() {
+    const stats = getStats();
+    if (!stats.classes.length) return '<div class="panel-empty">本学期还没有已选课程</div>';
+    const items = stats.classes.map(c => `<div class="panel-item panel-item--picked">
+        <div class="panel-item-head">
+          <span class="panel-item-title">《${esc(c.courseName)}》${c.name}</span>
+          <span class="badge badge--green">已选</span>
+          <span class="panel-item-actions"><span class="course-meta">${c.credit} 学分</span></span>
+        </div>
+        <div class="panel-item-meta">教师：${esc(c.teacher)} · ${timeText(c)} · ${esc(c.room)}</div>
+      </div>`).join('');
+    return `<div class="panel-summary">已选 <b>${stats.credit}</b> 学分 · <b>${stats.count}</b> 门课程（学分要求 0 ~ ${CREDIT_MAX}）</div>
+      <div class="panel-list">${items}</div>`;
+  }
+
+  function wishPanelHTML() {
+    const ids = Array.from(state.wishes);
+    if (!ids.length) return '<div class="panel-empty">意向单还是空的，可点击教学班行中的星标收藏备选教学班</div>';
+    const items = ids.map(id => {
+      const c = classMap.get(id);
+      const conflict = conflictOf(c);
+      const rem = remaining(c);
+      let badge = `<span class="badge badge--gray">余 ${rem}</span>`;
+      let act = `<button class="btn" type="button" data-panel="wish-select" data-class="${id}">选课</button>`;
+      if (state.chosen.has(id)) {
+        badge = '<span class="badge badge--green">已选</span>';
+        act = '';
+      } else if (state.waitlist.has(id)) {
+        badge = `<span class="badge badge--amber">候补中 · 第 ${state.waitlist.get(id)} 位</span>`;
+      } else if (conflict) {
+        badge = '<span class="badge badge--red">时间冲突</span>';
+        act = '<button class="btn" type="button" disabled>时间冲突</button>';
+      } else if (rem <= 0) {
+        badge = '<span class="badge badge--amber">已满</span>';
+        act = '<button class="btn" type="button" disabled>已满</button>';
+      }
+      return `<div class="panel-item">
+        <div class="panel-item-head">
+          <span class="panel-item-title">《${esc(c.courseName)}》${c.name}</span>${badge}
+          <span class="panel-item-actions">${act}
+            <button class="btn" type="button" data-panel="wish-remove" data-class="${id}">移除</button>
+          </span>
+        </div>
+        <div class="panel-item-meta">教师：${esc(c.teacher)} · ${timeText(c)} · ${esc(c.room)}</div>
+      </div>`;
+    }).join('');
+    return `<div class="panel-summary">共收藏 <b>${ids.length}</b> 个教学班（上限 ${WISH_MAX} 个）· 意向单不占容量，选课仍需通过校验</div>
+      <div class="panel-list">${items}</div>`;
+  }
+
+  function profilePanelHTML() {
+    return `<div class="profile-grid">
+      <span class="p-label">学号</span><span>${STUDENT.no}</span>
+      <span class="p-label">姓名</span><span>${STUDENT.name}</span>
+      <span class="p-label">性别</span><span>${STUDENT.gender}</span>
+      <span class="p-label">学院</span><span>${STUDENT.college}</span>
+      <span class="p-label">专业</span><span>${STUDENT.major}</span>
+      <span class="p-label">年级</span><span>${STUDENT.grade}</span>
+      <span class="p-label">联系电话</span><input id="profPhone" value="${esc(STUDENT.phone)}">
+      <span class="p-label">邮箱</span><input id="profEmail" value="${esc(STUDENT.email)}">
+    </div>`;
+  }
+
+  function saveProfile() {
+    const phoneInput = $('profPhone');
+    const emailInput = $('profEmail');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+    const email = emailInput ? emailInput.value.trim() : '';
+    if (phone && !/^\d{6,20}$/.test(phone)) return toast('联系电话格式不正确', 'error');
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast('邮箱格式不正确', 'error');
+    STUDENT.phone = phone;
+    STUDENT.email = email;
+    toast('个人资料已保存', 'success');
+    closeModal();
+  }
+
+  /* ================= 轻提示 ================= */
+  function toast(text, type) {
+    const div = document.createElement('div');
+    div.className = 'toast' + (type ? ' toast--' + type : '');
+    div.textContent = text;
+    el.toastWrap.appendChild(div);
+    setTimeout(() => {
+      div.style.transition = 'opacity .3s';
+      div.style.opacity = '0';
+      setTimeout(() => div.remove(), 320);
+    }, 2400);
+  }
+
+  /* ================= 选课 / 退课 / 候补（FR-06 / 07 / 14） ================= */
+  /* 选课校验顺序：重复选课 → 同课程互斥 → 容量 → 时间冲突 → 学分上限 */
+  function attemptSelect(id) {
+    const c = classMap.get(id);
+    if (!c) return { ok: false, reason: '教学班不存在' };
+    const course = courseMap.get(c.courseId);
+
+    if (state.chosen.has(id)) return { ok: false, reason: '已选该教学班' };
+
+    const sameCourse = course.classes.find(x => state.chosen.has(x.id));
+    if (sameCourse) return { ok: false, reason: `已选《${course.name}》${sameCourse.name}，同一课程只能选一个教学班` };
+
+    if (remaining(c) <= 0) return { ok: false, reason: '该教学班已满，可加入候补' };
+
+    const conflict = conflictOf(c);
+    if (conflict) return { ok: false, reason: `与已选《${conflict.courseName}》${conflict.name}（${timeText(conflict)}）时间冲突` };
+
+    const stats = getStats();
+    if (stats.credit + c.credit > CREDIT_MAX) {
+      return { ok: false, reason: `超出学分上限 ${CREDIT_MAX} 学分，当前已选 ${stats.credit} 学分` };
+    }
+
+    state.chosen.add(id);
+    state.wishes.delete(id);
+    state.batch.delete(id);
+    c.selected += 1;
+    return { ok: true };
+  }
+
+  function trySelect(id) {
+    const result = attemptSelect(id);
+    if (!result.ok) {
+      toast(result.reason, 'error');
+      return false;
+    }
+    const c = classMap.get(id);
+    render();
+    toast(`选课成功：《${c.courseName}》${c.name}`, 'success');
+    return true;
+  }
+
+  function confirmDrop(id) {
+    const c = classMap.get(id);
+    if (!c || !state.chosen.has(id)) return toast('未选该教学班', 'warn');
+    openConfirm(`确定退选《${c.courseName}》${c.name}（${timeText(c)}）吗？退课后名额将释放给候补队列。`, () => dropClass(id));
+  }
+
+  function dropClass(id) {
+    const c = classMap.get(id);
+    if (!c || !state.chosen.has(id)) return toast('未选该教学班', 'warn');
+    state.chosen.delete(id);
+    state.batch.delete(id);
+    c.selected = Math.max(0, c.selected - 1);
+    render();
+    toast(`已退选：《${c.courseName}》${c.name}`, 'success');
+  }
+
+  /* 候补序号（原型模拟：按教学班 id 生成稳定的排队位次） */
+  function mockWaitPosition(c) {
+    const seed = c.id.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+    return 1 + (seed % 4);
+  }
+
+  function joinWaitlist(id) {
+    const c = classMap.get(id);
+    if (!c) return;
+    const course = courseMap.get(c.courseId);
+
+    if (state.chosen.has(id)) return toast('已选该教学班', 'info');
+    if (state.waitlist.has(id)) return toast(`已在候补队列中（第 ${state.waitlist.get(id)} 位）`, 'info');
+
+    const sameCourse = course.classes.find(x => state.chosen.has(x.id));
+    if (sameCourse) return toast(`已选《${course.name}》${sameCourse.name}，同一课程只能选一个教学班`, 'warn');
+
+    const conflict = conflictOf(c);
+    if (conflict) return toast(`与已选《${conflict.courseName}》${conflict.name}（${timeText(conflict)}）时间冲突`, 'error');
+
+    const stats = getStats();
+    if (stats.credit + c.credit > CREDIT_MAX) return toast(`超出学分上限 ${CREDIT_MAX} 学分`, 'error');
+
+    if (remaining(c) > 0) return toast('该教学班尚有余量，请直接选课', 'warn');
+
+    const position = mockWaitPosition(c);
+    state.waitlist.set(id, position);
+    render();
+    toast(`已加入候补：《${c.courseName}》${c.name}，当前第 ${position} 位`, 'success');
+  }
+
+  function leaveWaitlist(id) {
+    if (!state.waitlist.has(id)) return;
+    const c = classMap.get(id);
+    state.waitlist.delete(id);
+    render();
+    toast(`已退出候补：《${c.courseName}》${c.name}`, 'info');
+  }
+
+  /* ================= 批量退课（FR-09 / BR-10） ================= */
+  function toggleBatch(id, checked) {
+    if (checked) state.batch.add(id);
+    else state.batch.delete(id);
+    renderBatchBar();
+  }
+
+  function batchDrop() {
+    const ids = Array.from(state.batch);
+    if (!ids.length) return;
+    const credit = ids.reduce((sum, id) => sum + classMap.get(id).credit, 0);
+    openConfirm(`确定退选勾选的 ${ids.length} 个教学班吗？本次将退 ${credit} 学分。`, () => {
+      let ok = 0;
+      ids.forEach(id => {
+        if (!state.chosen.has(id)) return;
+        const c = classMap.get(id);
+        state.chosen.delete(id);
+        c.selected = Math.max(0, c.selected - 1);
+        ok += 1;
+      });
+      state.batch.clear();
+      render();
+      toast(`批量退课完成：成功退选 ${ok} 个教学班，共 ${credit} 学分`, 'success');
+    });
+  }
+
+  /* ================= 意向单（FR-13 / BR-09） ================= */
+  function toggleWish(id) {
+    if (state.wishes.has(id)) {
+      state.wishes.delete(id);
+      render();
+      toast('已移出意向单', 'info');
+      return;
+    }
+    if (state.wishes.size >= WISH_MAX) return toast(`意向单最多收藏 ${WISH_MAX} 个教学班`, 'warn');
+    state.wishes.add(id);
+    render();
+    toast('已加入意向单', 'success');
+  }
+
+  /* 一键选课：逐条发起，汇总结果（不逐条弹提示） */
+  function wishSelectAll() {
+    const ids = Array.from(state.wishes);
+    if (!ids.length) return toast('意向单为空', 'info');
+    let ok = 0;
+    let fail = 0;
+    ids.forEach(id => {
+      if (attemptSelect(id).ok) ok += 1;
+      else fail += 1;
+    });
+    render();
+    refreshPanel();
+    toast(`一键选课完成：成功 ${ok} 个${fail ? `，失败 ${fail} 个` : ''}`, ok ? 'success' : 'error');
+  }
+
+  /* ================= 余量刷新（FR-12 / BR-07） ================= */
+  function refreshAvailability(manual) {
+    allClasses().forEach(c => {
+      if (Math.random() > 0.3) return;
+      const delta = Math.random() < 0.5 ? 1 : -1;
+      const min = state.chosen.has(c.id) ? 1 : 0;
+      c.selected = Math.min(c.capacity, Math.max(min, c.selected + delta));
+    });
+    state.lastRefresh = new Date();
+    render();
+    if (manual) toast('余量已刷新', 'success');
+  }
+
+  /* ================= 倒计时 ================= */
+  function updateCountdown() {
+    const ms = DEADLINE - Date.now();
+    if (ms <= 0) {
+      el.countdown.textContent = '本轮已截止';
+      return;
+    }
+    const total = Math.floor(ms / 1000);
+    const d = Math.floor(total / 86400);
+    const h = Math.floor(total % 86400 / 3600);
+    const m = Math.floor(total % 3600 / 60);
+    const s = total % 60;
+    el.countdown.textContent = `${d} 天 ${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+
+  /* ================= 事件绑定 ================= */
+  function bindEvents() {
+    /* 查询与重置 */
+    el.searchBtn.addEventListener('click', runSearch);
+    el.searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') runSearch();
+    });
+    el.resetBtn.addEventListener('click', () => {
+      el.searchInput.value = '';
+      state.keyword = '';
+      state.onlyAvailable = true;
+      state.onlyNoConflict = true;
+      state.teacher = '';
+      state.day = 0;
+      state.section = 0;
+      el.advTeacher.value = '';
+      el.advDay.value = '0';
+      el.advSection.value = '0';
+      render();
+      toast('已重置查询条件', 'info');
+    });
+
+    /* 余量刷新 */
+    el.refreshBtn.addEventListener('click', () => refreshAvailability(true));
+
+    /* 已选条件标签删除（FR-03） */
+    el.filterTags.addEventListener('click', e => {
+      const x = e.target.closest('[data-remove]');
+      if (!x) return;
+      const key = x.dataset.remove;
+      if (key === 'onlyAvailable') state.onlyAvailable = false;
+      if (key === 'onlyNoConflict') state.onlyNoConflict = false;
+      if (key === 'teacher') state.teacher = '';
+      if (key === 'day') state.day = 0;
+      if (key === 'section') state.section = 0;
+      render();
+    });
+
+    /* 排序下拉（FR-10） */
+    el.sortBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const willOpen = el.sortMenu.hidden;
+      el.sortMenu.hidden = !willOpen;
+      el.sortBtn.classList.toggle('ctl--open', willOpen);
+    });
+    el.sortMenu.addEventListener('click', e => {
+      const btn = e.target.closest('[data-sort]');
+      if (!btn) return;
+      state.sortBy = btn.dataset.sort;
+      el.sortMenu.hidden = true;
+      el.sortBtn.classList.remove('ctl--open');
+      render();
+    });
+    document.addEventListener('click', () => {
+      if (el.sortMenu.hidden) return;
+      el.sortMenu.hidden = true;
+      el.sortBtn.classList.remove('ctl--open');
+    });
+
+    /* 高级筛选面板（FR-10） */
+    el.advToggle.addEventListener('click', () => {
+      const willOpen = el.advPanel.hidden;
+      el.advPanel.hidden = !willOpen;
+      el.advToggle.classList.toggle('ctl--open', willOpen);
+      if (!willOpen) return;
+      el.advTeacher.value = state.teacher;
+      el.advDay.value = String(state.day);
+      el.advSection.value = String(state.section);
+    });
+    el.advApply.addEventListener('click', () => {
+      state.teacher = el.advTeacher.value.trim();
+      state.day = Number(el.advDay.value);
+      state.section = Number(el.advSection.value);
+      render();
+      el.advPanel.hidden = true;
+      el.advToggle.classList.remove('ctl--open');
+    });
+    el.advClear.addEventListener('click', () => {
+      el.advTeacher.value = '';
+      el.advDay.value = '0';
+      el.advSection.value = '0';
+      state.teacher = '';
+      state.day = 0;
+      state.section = 0;
+      render();
+    });
+
+    /* 类别 Tab（FR-04） */
+    el.tabs.forEach(tab => tab.addEventListener('click', () => {
+      state.category = tab.dataset.cat;
+      render();
+    }));
+
+    /* 全部展开 / 收起（FR-09） */
+    el.expandAll.addEventListener('click', () => {
+      const list = visibleCourses();
+      if (!list.length) return;
+      const allOpen = list.every(item => state.expanded.has(item.course.id));
+      list.forEach(item => {
+        if (allOpen) state.expanded.delete(item.course.id);
+        else state.expanded.add(item.course.id);
+      });
+      render();
+    });
+
+    /* 课程列表事件委托：展开/收起、选课、退课、候补、意向单、批量勾选 */
+    el.courseList.addEventListener('click', e => {
+      const head = e.target.closest('[data-toggle]');
+      if (head) {
+        const id = head.dataset.toggle;
+        if (state.expanded.has(id)) state.expanded.delete(id);
+        else state.expanded.add(id);
+        renderList();
+        return;
+      }
+      if (e.target.tagName === 'INPUT') return;
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const id = btn.dataset.class;
+      const action = btn.dataset.action;
+      if (action === 'select') trySelect(id);
+      if (action === 'drop') confirmDrop(id);
+      if (action === 'wait') joinWaitlist(id);
+      if (action === 'unwait') leaveWaitlist(id);
+      if (action === 'wish') toggleWish(id);
+    });
+    el.courseList.addEventListener('change', e => {
+      const cb = e.target.closest('input[data-action="check"]');
+      if (!cb) return;
+      toggleBatch(cb.dataset.class, cb.checked);
+    });
+
+    /* 批量退课操作条 */
+    el.batchBar.addEventListener('click', e => {
+      const btn = e.target.closest('[data-batch]');
+      if (!btn) return;
+      if (btn.dataset.batch === 'drop') batchDrop();
+      if (btn.dataset.batch === 'clear') {
+        state.batch.clear();
+        renderBatchBar();
+      }
+    });
+
+    /* 弹窗按钮与面板内操作 */
+    el.modalMask.addEventListener('click', e => {
+      if (e.target === el.modalMask) return closeModal();
+      const btn = e.target.closest('[data-modal]');
+      if (!btn) return;
+      const key = btn.dataset.modal;
+      if (key === 'cancel' || key === 'close') return closeModal();
+      if (key === 'ok') {
+        const fn = confirmHandler;
+        closeModal();
+        if (fn) fn();
+        return;
+      }
+      if (key === 'saveProfile') return saveProfile();
+      if (key === 'wishAll') return wishSelectAll();
+    });
+    el.modalBody.addEventListener('click', e => {
+      const btn = e.target.closest('[data-panel]');
+      if (!btn) return;
+      const id = btn.dataset.class;
+      if (btn.dataset.panel === 'wish-remove') {
+        toggleWish(id);
+        refreshPanel();
+        return;
+      }
+      if (btn.dataset.panel === 'wish-select') {
+        if (trySelect(id)) refreshPanel();
+      }
+    });
+
+    /* 顶部导航（FR-08 / FR-13） */
+    el.navLinks.forEach(link => link.addEventListener('click', e => {
+      e.preventDefault();
+      const nav = link.dataset.nav;
+      el.navLinks.forEach(x => x.classList.toggle('active', x === link));
+      if (nav === 'select') {
+        setRail('select');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      if (nav === 'my') {
+        setRail('my');
+        openPanel('selected');
+        return;
+      }
+      if (nav === 'wish') {
+        setRail('wish');
+        openPanel('wish');
+        return;
+      }
+      if (nav === 'profile') openPanel('profile');
+    }));
+
+    /* 右侧竖排导航 */
+    el.railItems.forEach(item => item.addEventListener('click', () => {
+      const rail = item.dataset.rail;
+      setRail(rail);
+      if (rail === 'select') window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (rail === 'my') openPanel('selected');
+      if (rail === 'wish') openPanel('wish');
+    }));
+
+    /* 退出登录与重新登录 */
+    el.logoutBtn.addEventListener('click', () => {
+      openConfirm('确定退出登录吗？', () => {
+        el.loginMask.hidden = false;
+        toast('已退出登录', 'info');
+      });
+    });
+    el.reloginBtn.addEventListener('click', () => {
+      el.loginMask.hidden = true;
+      toast(`登录成功，欢迎回来，${STUDENT.name}`, 'success');
+    });
+
+    /* 键盘 Esc 关闭弹窗 */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !el.modalMask.hidden) closeModal();
+    });
+
+    /* 页面隐藏时暂停自动刷新，恢复可见时补一次（BR-07） */
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) return;
+      if (Date.now() - state.lastRefresh.getTime() > REFRESH_MS) refreshAvailability(false);
+    });
+  }
+
+  function setRail(key) {
+    el.railItems.forEach(x => x.classList.toggle('rail-item--active', x.dataset.rail === key));
+  }
+
+  function runSearch() {
+    state.keyword = el.searchInput.value;
+    render();
+    if (!visibleCourses().length) toast('未找到符合条件的课程', 'warn');
+  }
+
+  /* ================= 初始化 ================= */
+  function init() {
+    bindEvents();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    setInterval(() => {
+      if (!document.hidden) refreshAvailability(false);
+    }, REFRESH_MS);
+    render();
+  }
+
+  init();
+})();
+</script>
 
 </body>
 </html>
