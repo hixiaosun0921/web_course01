@@ -1,0 +1,87 @@
+/* ================= 登录页 ================= */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, #0A57B8 0%, #093F86 55%, #062A5C 100%);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 34px 26px;
+  box-shadow: 0 26px 64px rgba(4, 16, 33, .35);
+}
+
+.login-box .brand {
+  color: var(--blue-700);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  white-space: normal;
+}
+
+.login-box .term {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.login-form {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.login-field input {
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FBFDFF;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.login-field input:focus {
+  outline: 2px solid var(--blue-100);
+  border-color: var(--blue-600);
+}
+
+.login-submit {
+  height: 42px;
+  margin-top: 4px;
+}
+
+.login-tip {
+  margin: 16px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ================= 其他补充 ================= */
+.profile-note {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.course-list .empty { margin-top: 0; }
