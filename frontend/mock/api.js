@@ -20,10 +20,21 @@ const routes = [
   { method: 'DELETE', path: /^\/wishes\/([^/]+)$/, auth: true, handler: ctx => store.removeWish(ctx.studentNo, ctx.params[0]) }
 ];
 
+const MAX_BODY = 100 * 1024; // 请求体上限 100KB，防止超大请求耗尽内存
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', chunk => chunks.push(chunk));
+    let size = 0;
+    req.on('data', chunk => {
+      size += chunk.length;
+      if (size > MAX_BODY) {
+        req.destroy();
+        reject(new BusinessError(5000, '请求体过大'));
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on('end', () => {
       const raw = Buffer.concat(chunks).toString('utf8');
       if (!raw) return resolve({});
