@@ -981,6 +981,75 @@
     color: var(--ink);
   }
 
+  /* ---------- 周课表（FR-15） ---------- */
+  .timetable {
+    margin-bottom: 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .tt-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 9px 14px;
+    background: #F8FAFD;
+    border-bottom: 1px solid var(--line-2);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  .tt-legend {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .tt-legend i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--red-600);
+  }
+
+  .tt-grid {
+    display: grid;
+    grid-template-columns: 46px repeat(7, 1fr);
+    gap: 1px;
+    background: var(--line-2);
+  }
+
+  .tt-grid > div {
+    min-height: 22px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .tt-grid .tt-corner,
+  .tt-grid .tt-day,
+  .tt-grid .tt-sec { background: #F8FAFD; }
+
+  .tt-grid .tt-day {
+    padding: 5px 0;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+
+  .tt-grid .tt-sec { font-variant-numeric: tabular-nums; }
+
+  .tt-grid .tt-slot.on { background: var(--red-600); }
+
   /* ---------- 轻提示 ---------- */
   .toast-wrap {
     position: fixed;
@@ -1666,9 +1735,44 @@
     if (currentPanel === 'selected') el.modalBody.innerHTML = selectedPanelHTML();
   }
 
+  /* 周课表（FR-15）：红块标记有课时间段，格内不显示课程信息 */
+  const TT_SECTIONS = 12;
+
+  function timetableHTML() {
+    const occupied = {};
+    for (let d = 1; d <= 7; d++) occupied[d] = {};
+    state.chosen.forEach(id => {
+      const c = classMap.get(id);
+      if (!c) return;
+      for (let s = c.start; s <= c.end; s++) {
+        if (s >= 1 && s <= TT_SECTIONS) occupied[c.day][s] = true;
+      }
+    });
+
+    const head = '<div class="tt-corner"></div>'
+      + DAY_NAMES.slice(1, 8).map(name => `<div class="tt-day">${name}</div>`).join('');
+
+    let body = '';
+    for (let s = 1; s <= TT_SECTIONS; s++) {
+      body += `<div class="tt-sec">${s}</div>`;
+      for (let d = 1; d <= 7; d++) {
+        body += `<div class="tt-slot${occupied[d][s] ? ' on' : ''}"></div>`;
+      }
+    }
+
+    return `<div class="timetable">
+      <p class="tt-title">周课表<span class="tt-legend"><i></i>有课</span></p>
+      <div class="tt-grid">${head}${body}</div>
+    </div>`;
+  }
+
   function selectedPanelHTML() {
     const stats = getStats();
-    if (!stats.classes.length) return '<div class="panel-empty">本学期还没有已选课程</div>';
+    if (!stats.classes.length) {
+      return `<div class="panel-summary">已选 <b>0</b> 学分 · <b>0</b> 门课程（学分要求 0 ~ ${CREDIT_MAX}）</div>
+        ${timetableHTML()}
+        <div class="panel-empty">本学期还没有已选课程</div>`;
+    }
     const items = stats.classes.map(c => `<div class="panel-item panel-item--picked">
         <div class="panel-item-head">
           <span class="panel-item-title">《${esc(c.courseName)}》${c.name}</span>
@@ -1678,6 +1782,7 @@
         <div class="panel-item-meta">教师：${esc(c.teacher)} · ${timeText(c)} · ${esc(c.room)}</div>
       </div>`).join('');
     return `<div class="panel-summary">已选 <b>${stats.credit}</b> 学分 · <b>${stats.count}</b> 门课程（学分要求 0 ~ ${CREDIT_MAX}）</div>
+      ${timetableHTML()}
       <div class="panel-list">${items}</div>`;
   }
 
