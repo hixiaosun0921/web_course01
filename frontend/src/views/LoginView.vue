@@ -50,7 +50,7 @@ async function submit() {
           {{ submitting ? '登录中…' : '登 录' }}
         </button>
       </form>
-      <p class="login-tip">演示账号：学号 2024010001，密码 123456（所有学生通用）</p>
+      <p class="login-tip">测试提示：学号在 2024010001 ~ 2024010040 中任选（请各用不同学号），密码统一 123456</p>
     </div>
   </div>
 </template>
