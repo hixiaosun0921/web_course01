@@ -74,3 +74,6 @@ $RECYCLE.BIN/
 *.bak
 *.tmp
 *.txt
+
+# ===== Java 后端构建产物 =====
+target/

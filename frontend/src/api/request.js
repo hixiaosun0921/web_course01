@@ -10,7 +10,7 @@ export class ApiError extends Error {
 const TOKEN_KEY = 'course-select-token';
 
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE || '/api',
   timeout: 10000
 });
 

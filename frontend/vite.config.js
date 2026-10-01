@@ -1,33 +1,24 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { createApiHandler } from './mock/api.js';
-import { dataFilePaths, reloadData } from './mock/store.js';
 
-/* 开发/预览阶段：由 Vite 中间件直接提供 /api（无需 Java 后端） */
-function mockApiPlugin() {
-  return {
-    name: 'mock-api',
-    configureServer(server) {
-      server.middlewares.use('/api', createApiHandler());
-      const files = dataFilePaths();
-      server.watcher.add(files);
-      server.watcher.on('change', changed => {
-        if (files.includes(changed)) {
-          reloadData();
-          server.config.logger.info('[mock-api] 数据文件已变更，已重新加载');
-        }
-      });
-    },
-    configurePreviewServer(server) {
-      server.middlewares.use('/api', createApiHandler());
-    }
-  };
-}
-
+/*
+ * 纯前端工程：开发时 /api 代理到后端（默认 http://localhost:8080，
+ * 可用环境变量 VITE_PROXY_TARGET 覆盖）。
+ * 后端工程见仓库根目录 backend/（Spring Boot + PostgreSQL）。
+ */
 export default defineConfig({
-  plugins: [vue(), mockApiPlugin()],
+  plugins: [vue()],
   server: {
     port: 5173,
-    open: false
+    open: false,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_PROXY_TARGET || 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    port: 4173
   }
 });
