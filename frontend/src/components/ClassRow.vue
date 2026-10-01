@@ -60,13 +60,14 @@ function toggleCheck(event) {
       {{ cls.className }}
       <span v-if="waiting" class="badge badge--amber">候补中 · 第 {{ waitPosition }} 位</span>
     </span>
-    <span class="cls-cell">{{ cls.teacher }}</span>
+    <span class="cls-cell cls-teacher"><i class="cell-label">教师</i>{{ cls.teacher }}</span>
     <span class="cls-cell cls-time">
-      {{ timeText(cls) }}
+      <i class="cell-label">时间</i>{{ timeText(cls) }}
       <span v-if="conflict" class="conflict-note">冲突</span>
     </span>
-    <span class="cls-cell">{{ cls.room }}</span>
+    <span class="cls-cell cls-room"><i class="cell-label">地点</i>{{ cls.room }}</span>
     <span class="cap">
+      <i class="cell-label">容量</i>
       <span class="cap-bar"><i :class="levelClass" :style="{ width: `${percent}%` }"></i></span>
       <span class="cap-num">{{ cls.selected }} / {{ cls.capacity }}</span>
     </span>

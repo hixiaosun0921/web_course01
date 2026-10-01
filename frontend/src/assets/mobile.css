@@ -1,0 +1,195 @@
+/* ============================================================
+   移动端响应式适配（在 styles.css / app.css 之后加载）
+   - ≤980px：顶栏改两行，恢复"我的已选 / 意向单 / 个人资料"入口
+   - ≤640px：手机竖屏（卡片式教学班、等宽按钮、贴边底栏）
+   ============================================================ */
+
+/* 移动端才显示的字段标签（如"教师 / 时间 / 地点 / 容量"） */
+.cell-label {
+  display: none;
+  font-style: normal;
+}
+
+/* ---------- 平板 / 窄屏（≤980px） ---------- */
+@media (max-width: 980px) {
+  .topbar-inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 16px;
+    gap: 8px 16px;
+  }
+
+  .topnav {
+    display: flex;
+    order: 3;
+    width: 100%;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .topnav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topnav a {
+    flex: none;
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+}
+
+/* ---------- 手机（≤640px） ---------- */
+@media (max-width: 640px) {
+  body {
+    font-size: 13.5px;
+  }
+
+  .page {
+    padding: 12px 12px 96px;
+  }
+
+  /* 顶栏 */
+  .brand { font-size: 17px; }
+  .brand .term { display: none; }
+  .userbox { gap: 10px; font-size: 12.5px; }
+  .userbox .user-no { display: none; }
+  .userbox .avatar { width: 26px; height: 26px; }
+
+  /* 搜索区：输入一行、按钮等分一行 */
+  .searchbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .search-input { height: 38px; font-size: 13.5px; }
+  .search-actions { gap: 8px; }
+  .search-actions .btn {
+    flex: 1;
+    height: 38px;
+    padding: 0 6px;
+    font-size: 13px;
+  }
+
+  .refresh-note { font-size: 11.5px; padding: 0 12px 10px; }
+
+  /* 已选条件与排序 */
+  .filterbar { padding: 10px 12px; gap: 8px; }
+  .filter-tags {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-tags::-webkit-scrollbar { display: none; }
+  .tag { flex: none; }
+  .filter-right { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
+  .dropdown { left: 0; right: auto; }
+
+  /* 高级筛选 */
+  .adv-panel { padding: 12px; gap: 12px; }
+  .adv-field input,
+  .adv-field select { min-width: 0; width: 100%; }
+  .adv-actions { width: 100%; margin-left: 0; }
+  .adv-actions .btn { flex: 1; }
+
+  /* 学分信息条：两列网格 */
+  .creditbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    padding: 12px;
+  }
+  .creditbar .item { gap: 6px; font-size: 12.5px; }
+  .creditbar .item:first-child { grid-column: 1 / -1; }
+  .creditbar .num { font-size: 16px; }
+
+  /* 类别 Tab：横向滚动 */
+  .tabsbar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabsbar::-webkit-scrollbar { display: none; }
+  .tab { flex: none; padding: 8px 14px; font-size: 13.5px; }
+
+  /* 课程卡片 */
+  .course-list { gap: 8px; margin-top: 10px; }
+  .course-head { flex-wrap: wrap; row-gap: 6px; gap: 8px; padding: 12px; }
+  .course-code { order: 1; font-size: 11.5px; padding: 1px 6px; }
+  .course-name { order: 2; flex: 1 1 auto; font-size: 15px; }
+  .chev { order: 3; margin-left: 0; }
+  .course-head .badge { order: 4; }
+  .course-meta,
+  .meta-sep { order: 5; font-size: 12px; }
+
+  /* 教学班：卡片式布局 */
+  .class-row {
+    grid-template-columns: 20px 1fr 1fr 20px;
+    grid-template-areas:
+      "check name name name"
+      "teacher teacher room room"
+      "time time time time"
+      "cap cap remain remain"
+      "actions actions actions actions";
+    gap: 6px 10px;
+    padding: 12px;
+  }
+  .cls-check { grid-area: check; }
+  .cls-name { grid-area: name; }
+  .cls-teacher { grid-area: teacher; }
+  .cls-room { grid-area: room; }
+  .cls-time { grid-area: time; }
+  .cap { grid-area: cap; }
+  .remain { grid-area: remain; justify-self: end; }
+  .class-actions { grid-area: actions; justify-content: flex-start; padding-top: 2px; }
+  .class-actions .btn { min-height: 36px; }
+  .star-btn {
+    min-width: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cap-bar { width: 56px; }
+  .cell-label { display: inline; margin-right: 4px; color: var(--muted); font-weight: 400; }
+
+  /* 批量退课操作条：贴边、按钮等分 */
+  .batch-bar {
+    left: 8px;
+    right: 8px;
+    bottom: 10px;
+    transform: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .batch-bar > span { flex: 1 1 100%; }
+  .batch-bar .btn { flex: 1; height: 36px; }
+
+  /* 弹窗与面板 */
+  .modal-mask { padding: 10px; }
+  .modal { max-height: 88vh; }
+  .modal-body { padding: 14px; }
+  .modal-foot { padding: 10px 14px; }
+  .modal-foot .btn { height: 36px; }
+  .panel-item-actions { gap: 6px; }
+  .panel-item-actions .btn { height: 32px; }
+
+  /* 周课表 */
+  .tt-grid { grid-template-columns: 34px repeat(7, 1fr); }
+  .tt-grid > div { min-height: 20px; font-size: 10.5px; }
+  .tt-title { padding: 8px 12px; }
+
+  /* 空状态与轻提示 */
+  .empty { padding: 34px 16px; }
+  .toast-wrap { top: 10px; width: calc(100% - 24px); }
+  .toast { font-size: 13px; padding: 8px 14px; }
+
+  /* 登录页 */
+  .login-box { padding: 26px 20px 22px; }
+  .login-box .brand { font-size: 20px; }
+}

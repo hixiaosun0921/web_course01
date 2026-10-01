@@ -31,7 +31,8 @@ function logout() {
       </nav>
       <div class="userbox">
         <span class="avatar">{{ user.student?.name?.slice(0, 1) }}</span>
-        <span>{{ user.student?.name }} · {{ user.student?.studentNo }}</span>
+        <span class="user-name">{{ user.student?.name }}</span>
+        <span class="user-no">· {{ user.student?.studentNo }}</span>
         <span class="logout" @click="logout">退出登录</span>
       </div>
     </div>
