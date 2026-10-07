@@ -2,11 +2,12 @@ import { defineStore } from 'pinia';
 import { login as loginApi } from '../api/auth';
 
 const TOKEN_KEY = 'course-select-token';
-const STUDENT_KEY = 'course-select-student';
+const ROLE_KEY = 'course-select-role';
+const USER_KEY = 'course-select-user';
 
-function readStudent() {
+function readUser() {
   try {
-    return JSON.parse(localStorage.getItem(STUDENT_KEY) || 'null');
+    return JSON.parse(localStorage.getItem(USER_KEY) || 'null');
   } catch {
     return null;
   }
@@ -15,24 +16,31 @@ function readStudent() {
 export const useUserStore = defineStore('user', {
   state: () => ({
     token: localStorage.getItem(TOKEN_KEY) || '',
-    student: readStudent()
+    role: localStorage.getItem(ROLE_KEY) || '',
+    user: readUser()   // { no, name }
   }),
   getters: {
-    isLoggedIn: state => !!state.token
+    isLoggedIn: state => !!state.token,
+    isAdmin: state => state.role === 'admin',
+    homePath: state => (state.role === 'admin' ? '/admin' : '/course-select')
   },
   actions: {
-    async login(studentNo, password) {
-      const data = await loginApi(studentNo, password);
+    async login(account, password) {
+      const data = await loginApi(account, password);
       this.token = data.token;
-      this.student = data.student;
+      this.role = data.role;
+      this.user = data.user;
       localStorage.setItem(TOKEN_KEY, data.token);
-      localStorage.setItem(STUDENT_KEY, JSON.stringify(data.student));
+      localStorage.setItem(ROLE_KEY, data.role);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
     },
     logout() {
       this.token = '';
-      this.student = null;
+      this.role = '';
+      this.user = null;
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(STUDENT_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(USER_KEY);
     }
   }
 });

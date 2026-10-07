@@ -65,10 +65,11 @@ for (const vp of [{ width: 375, height: 812 }, { width: 414, height: 896 }, { wi
 
   /* 直接写入登录态，跳过表单 */
   await page.goto(BASE + '/login', { waitUntil: 'networkidle0' });
-  await page.evaluate((t, s) => {
-    localStorage.setItem('course-select-token', t);
-    localStorage.setItem('course-select-student', JSON.stringify(s));
-  }, token, login.data.student);
+  await page.evaluate((data) => {
+    localStorage.setItem('course-select-token', data.token);
+    localStorage.setItem('course-select-role', data.role);
+    localStorage.setItem('course-select-user', JSON.stringify(data.user));
+  }, { token, role: login.data.role, user: login.data.user });
   await page.goto(BASE + '/course-select', { waitUntil: 'networkidle0' });
   await page.waitForSelector('.course-list .course');
 

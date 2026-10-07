@@ -17,6 +17,9 @@ public final class ErrorCode {
     public static final int WAITLIST_DUPLICATE = 3001; // 候补重复
     public static final int WAITLIST_NOT_FOUND = 3002; // 候补不存在 / 已失效
     public static final int WISH_LIMIT = 4001;        // 意向单数量超限
+    public static final int PARAM_INVALID = 4002;     // 参数错误 / 唯一性冲突
+    public static final int CONSTRAINT_VIOLATION = 4003; // 存在关联数据，不能删除
+    public static final int NOT_FOUND = 4004;         // 数据不存在
     public static final int SYSTEM_ERROR = 5000;      // 系统异常
 
     private ErrorCode() {

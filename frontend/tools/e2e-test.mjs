@@ -73,7 +73,7 @@ try {
   await page.click('.login-submit');
   await page.waitForSelector('.toast');
   const errText = await page.$eval('.toast', el => el.textContent);
-  check('错误密码提示', errText.includes('学号或密码错误'), errText);
+  check('错误密码提示', errText.includes('账号或密码错误'), errText);
 
   await page.waitForFunction(() => !document.querySelector('.toast'));
   await page.$eval('input[type="password"]', el => { el.value = ''; });

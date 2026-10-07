@@ -5,5 +5,6 @@ import router from './router';
 import './assets/styles.css';
 import './assets/app.css';
 import './assets/mobile.css';
+import './assets/admin.css';
 
 createApp(App).use(createPinia()).use(router).mount('#app');

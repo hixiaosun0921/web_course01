@@ -13,6 +13,12 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    public static final String ROLE_STUDENT = "student";
+    public static final String ROLE_ADMIN = "admin";
+
+    public record TokenInfo(Long userId, String role) {
+    }
+
     private final SecretKey key;
     private final long expireMillis;
 
@@ -22,24 +28,25 @@ public class JwtUtil {
         this.expireMillis = expireHours * 3600_000L;
     }
 
-    public String createToken(Long studentId, String studentNo) {
+    public String createToken(Long userId, String userNo, String role) {
         Date now = new Date();
         return Jwts.builder()
-                .subject(String.valueOf(studentId))
-                .claim("studentNo", studentNo)
+                .subject(String.valueOf(userId))
+                .claim("userNo", userNo)
+                .claim("role", role)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expireMillis))
                 .signWith(key)
                 .compact();
     }
 
-    /** 校验并解析 token，返回学生 ID；无效时抛出异常 */
-    public Long parseStudentId(String token) {
+    /** 校验并解析 token；无效时抛出异常 */
+    public TokenInfo parse(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        return Long.valueOf(claims.getSubject());
+        return new TokenInfo(Long.valueOf(claims.getSubject()), String.valueOf(claims.get("role")));
     }
 }

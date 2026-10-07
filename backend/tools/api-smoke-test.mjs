@@ -26,7 +26,8 @@ async function api(method, path, body, token) {
 const bad = await api('POST', '/auth/login', { studentNo: STUDENT_NO, password: 'wrong' });
 check('错误密码拒绝', bad.code === 1002, bad.message);
 const login = await api('POST', '/auth/login', { studentNo: STUDENT_NO, password: PASSWORD });
-check('登录成功', login.code === 0 && !!login.data.token && login.data.student.studentNo === STUDENT_NO);
+check('登录成功', login.code === 0 && !!login.data.token && login.data.role === 'student'
+  && login.data.user.no === STUDENT_NO);
 const token = login.data.token;
 
 const noAuth = await api('GET', '/courses');

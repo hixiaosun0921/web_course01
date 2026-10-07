@@ -24,6 +24,15 @@ public class ClassRow {
     private String courseName;
     private BigDecimal credit;
     private String category;
+    private Integer waitCount;
+
+    public Integer getWaitCount() {
+        return waitCount;
+    }
+
+    public void setWaitCount(Integer waitCount) {
+        this.waitCount = waitCount;
+    }
 
     public Long getClassId() {
         return classId;

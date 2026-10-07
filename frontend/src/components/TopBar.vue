@@ -30,9 +30,9 @@ function logout() {
         <a href="#" @click.prevent="ui.openPanel('profile')">个人资料</a>
       </nav>
       <div class="userbox">
-        <span class="avatar">{{ user.student?.name?.slice(0, 1) }}</span>
-        <span class="user-name">{{ user.student?.name }}</span>
-        <span class="user-no">· {{ user.student?.studentNo }}</span>
+        <span class="avatar">{{ user.user?.name?.slice(0, 1) }}</span>
+        <span class="user-name">{{ user.user?.name }}</span>
+        <span class="user-no">· {{ user.user?.no }}</span>
         <span class="logout" @click="logout">退出登录</span>
       </div>
     </div>

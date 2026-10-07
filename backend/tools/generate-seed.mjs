@@ -22,6 +22,15 @@ const CATEGORY_MAP = {
   '英语': '英语分项',
   '体育': '体育分项'
 };
+
+/* 学院（FR-17）与类别的归属关系 */
+const COLLEGES = [
+  { id: 1, name: '计算机学院' },
+  { id: 2, name: '马克思主义学院' },
+  { id: 3, name: '外国语学院' },
+  { id: 4, name: '体育部' }
+];
+const CATEGORY_COLLEGE = { '主修课程': 1, '通识选修课': 2, '英语分项': 3, '体育分项': 4 };
 const DAY_NAMES = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
 function hashSeed(text) {
@@ -79,6 +88,8 @@ classRows.forEach(row => {
       credit: Number(creditText) || 0,
       category: CATEGORY_MAP[typeText] || typeText || '未分类'
     });
+    courses[courses.length - 1].collegeId =
+      CATEGORY_COLLEGE[courses[courses.length - 1].category] || null;
   }
 
   const rng = mulberry32(hashSeed(classNo));
@@ -106,7 +117,7 @@ classRows.forEach(row => {
 });
 
 const courseValues = courses.map(c =>
-  `(${c.id}, ${q(c.courseNo)}, ${q(c.name)}, ${c.credit}, ${q(c.category)})`);
+  `(${c.id}, ${q(c.courseNo)}, ${q(c.name)}, ${c.credit}, ${q(c.category)}, ${c.collegeId ?? 'NULL'})`);
 
 const classValues = classes.map(c =>
   `(${c.id}, ${c.courseId}, ${q(c.className)}, ${q(c.teacher)}, ${q(c.classTime)}, ${q(c.classroom)}, `
@@ -122,15 +133,26 @@ ON CONFLICT (id) DO NOTHING;
 -- 同步序列，避免后续自增主键冲突
 SELECT setval(pg_get_serial_sequence('student', 'id'), (SELECT MAX(id) FROM student));
 
-INSERT INTO course (id, course_no, name, credit, category) VALUES
+INSERT INTO course (id, course_no, name, credit, category, college_id) VALUES
 ${courseValues.join(',\n')}
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET college_id = EXCLUDED.college_id, name = EXCLUDED.name,
+  credit = EXCLUDED.credit, category = EXCLUDED.category;
 SELECT setval(pg_get_serial_sequence('course', 'id'), (SELECT MAX(id) FROM course));
 
 INSERT INTO teaching_class (id, course_id, class_name, teacher, class_time, classroom, day_of_week, start_section, end_section, start_week, end_week, capacity, selected_count) VALUES
 ${classValues.join(',\n')}
 ON CONFLICT (id) DO NOTHING;
 SELECT setval(pg_get_serial_sequence('teaching_class', 'id'), (SELECT MAX(id) FROM teaching_class));
+
+INSERT INTO college (id, name) VALUES
+${COLLEGES.map(c => `(${c.id}, ${q(c.name)})`).join(',\n')}
+ON CONFLICT (id) DO NOTHING;
+SELECT setval(pg_get_serial_sequence('college', 'id'), (SELECT MAX(id) FROM college));
+
+INSERT INTO admin (id, admin_no, password, name) VALUES
+(1, 'admin', ${q(passwordHash)}, '教务管理员')
+ON CONFLICT (id) DO NOTHING;
+SELECT setval(pg_get_serial_sequence('admin', 'id'), (SELECT MAX(id) FROM admin));
 `;
 
 fs.writeFileSync(outFile, sql, 'utf8');
